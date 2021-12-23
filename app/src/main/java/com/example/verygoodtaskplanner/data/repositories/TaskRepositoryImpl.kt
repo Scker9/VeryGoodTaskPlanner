@@ -3,7 +3,7 @@ package com.example.verygoodtaskplanner.data.repositories
 import androidx.room.RoomDatabase
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Task
-import com.example.verygoodtaskplanner.presentation.repositories.TasksRepository
+import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

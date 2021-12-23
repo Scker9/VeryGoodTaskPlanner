@@ -1,4 +1,4 @@
-package com.example.verygoodtaskplanner.presentation.repositories
+package com.example.verygoodtaskplanner.domain.repositories
 
 import com.example.verygoodtaskplanner.data.entities.Task
 import io.reactivex.Single

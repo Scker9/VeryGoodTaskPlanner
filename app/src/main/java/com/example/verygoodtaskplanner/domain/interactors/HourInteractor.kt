@@ -1,10 +1,9 @@
-package com.example.verygoodtaskplanner.domain
+package com.example.verygoodtaskplanner.domain.interactors
 
 import android.util.Log
-import android.widget.ArrayAdapter
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
-import com.example.verygoodtaskplanner.presentation.repositories.TasksRepository
+import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
 import io.reactivex.Single
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

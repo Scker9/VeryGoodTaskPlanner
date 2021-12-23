@@ -10,8 +10,9 @@ import com.example.randomdog.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.data.entities.TimeRange
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
-import com.example.verygoodtaskplanner.domain.HourInteractor
+import com.example.verygoodtaskplanner.domain.interactors.HourInteractor
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
@@ -29,8 +30,8 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
         Task(
             dateStart = 1640307794000,
             dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
+            name = "Govno ",
+            description = "Пися Пися ПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПися \n ПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПисяПися\n ПисяПисяПисяПисяПисяПися ПисяПисяПисяПисяПисяПися"
         ),
         Task(
             dateStart = 1640307794000,
@@ -43,49 +44,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
             dateFinish = 1640307794000 + 3600_000 * 4,
             name = "Govno",
             description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
-        Task(
-            dateStart = 1640307794000,
-            dateFinish = 1640307794000 + 3600_000 * 4,
-            name = "Govno",
-            description = "Пися"
-        ),
+        )
     )
     val fakeHourData = arrayListOf(
         Hour(0, 1, fakeDataTasks),
@@ -110,7 +69,6 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
         val calendar = binding.calendarView
         val recyclerHour = binding.hourTaskRecycler
         recyclerHour.adapter = adapter
-        adapter.fillRecycler(fakeHourData)
         db.taskDao().addTasks(fakeDataTasks).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -134,10 +92,16 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
             interactor.getHoursWithTasks(it.calendar.timeInMillis)
                 .subscribe(
                     { list ->
+                        adapter.fillRecycler(list)
                         //  Log.d(TAG, "got hours = $list")
                         list.forEach {
                             if (it.tasks.isNotEmpty()) {
-                                Log.d(TAG, "Got hour with task = $it")
+                                Log.d(
+                                    TAG,
+                                    "Got hour with task hour range = ${
+                                        it.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
+                                    } task range ${it.tasks[0].getFormattedRange(TimeRange.ReturnType.TIME_ONLY)}"
+                                )
                             }
                         }
                     },

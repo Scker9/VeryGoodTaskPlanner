@@ -12,13 +12,16 @@ import com.example.verygoodtaskplanner.data.entities.TimeRange
 
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
     private var items: ArrayList<Hour> = arrayListOf()
-    private val adapter by lazy { TasksRecyclerAdapter() } //ленивец!
 
     inner class HourViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        //private val adapter by lazy {  } //ленивец!
         val hourRangeTextView = itemView.findViewById<TextView>(R.id.timeTextView)
         val taskRecycler = itemView.findViewById<RecyclerView>(R.id.taskRecycler)
+
         fun bind(hour: Hour) {
+            val adapter = TasksRecyclerAdapter()
             hourRangeTextView.text = hour.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
+            adapter.setHasStableIds(true)
             taskRecycler.adapter = adapter
             adapter.fillRecycler(hour.tasks)
         }

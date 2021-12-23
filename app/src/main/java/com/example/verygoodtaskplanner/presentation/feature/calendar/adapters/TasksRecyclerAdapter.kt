@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.data.entities.TimeRange
 
 class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksViewHolder>() {
     private var items: ArrayList<Task> = arrayListOf()
@@ -15,9 +16,11 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
         val taskDescriptionTextView = itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
+        val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
         fun bind(task: Task) {
             taskNameTextView.text = task.name
             taskDescriptionTextView.text = task.description
+            taskTimeRange.text=task.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
         }
     }
 
