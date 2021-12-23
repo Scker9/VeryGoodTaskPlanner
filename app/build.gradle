@@ -30,12 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    viewBinding{
+    viewBinding {
         enabled = true
     }
 }
 
 dependencies {
+    def roomVersion = "2.4.0"
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
@@ -55,6 +57,11 @@ dependencies {
     kapt "com.github.moxy-community:moxy-compiler:2.2.2"
     //Calendar
     implementation 'com.applandeo:material-calendar-view:1.7.0'
+    //Room
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-rxjava2:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
     //Tests
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

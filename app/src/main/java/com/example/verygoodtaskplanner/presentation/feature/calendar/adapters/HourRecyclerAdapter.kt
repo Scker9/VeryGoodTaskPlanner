@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Hour
+import com.example.verygoodtaskplanner.data.entities.TimeRange
 
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
     private var items: ArrayList<Hour> = arrayListOf()
@@ -17,7 +18,7 @@ class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHol
         val hourRangeTextView = itemView.findViewById<TextView>(R.id.timeTextView)
         val taskRecycler = itemView.findViewById<RecyclerView>(R.id.taskRecycler)
         fun bind(hour: Hour) {
-            hourRangeTextView.text = hour.timeInterval
+            hourRangeTextView.text = hour.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
             taskRecycler.adapter = adapter
             adapter.fillRecycler(hour.tasks)
         }

@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.TaskModel
+import com.example.verygoodtaskplanner.data.entities.Task
 
 class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksViewHolder>() {
-    private var items: ArrayList<TaskModel> = arrayListOf()
+    private var items: ArrayList<Task> = arrayListOf()
 
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
         val taskDescriptionTextView = itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
-        fun bind(task: TaskModel) {
+        fun bind(task: Task) {
             taskNameTextView.text = task.name
             taskDescriptionTextView.text = task.description
         }
@@ -33,7 +33,7 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
     override fun getItemCount(): Int = items.count()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun fillRecycler(data: ArrayList<TaskModel>) {
+    fun fillRecycler(data: ArrayList<Task>) {
         items = data
         notifyDataSetChanged() // поправить под диф утилы
     }
