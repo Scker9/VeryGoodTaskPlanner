@@ -11,6 +11,9 @@ import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
+import com.example.verygoodtaskplanner.domain.HourInteractor
+import com.example.verygoodtaskplanner.data.getFormattedDate
+import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -19,16 +22,70 @@ import org.koin.core.component.inject
 class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
     private val TAG = this::class.java.simpleName
     val db by inject<TaskDatabase>()
+    val interactor by inject<HourInteractor>()
+    val adapter by lazy { HourRecyclerAdapter() }
+
     val fakeDataTasks = arrayListOf(
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы"),
-        Task(0, 0, "Говно писи", "почесать попы")
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
+        Task(
+            dateStart = 1640307794000,
+            dateFinish = 1640307794000 + 3600_000 * 4,
+            name = "Govno",
+            description = "Пися"
+        ),
     )
     val fakeHourData = arrayListOf(
         Hour(0, 1, fakeDataTasks),
@@ -43,7 +100,6 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
         Hour(0, 1, fakeDataTasks),
         Hour(0, 1, fakeDataTasks),
     )
-    val adapter by lazy { HourRecyclerAdapter() }
 
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CalendarWithTasksBinding
         get() = CalendarWithTasksBinding::inflate
@@ -64,14 +120,31 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Log.d(TAG, it.toString())
+                    //       Log.d(TAG, it.toString())
                 },
                 {
                     Log.d(TAG, it.toString())
                 },
             )
         calendar.setOnDayClickListener {
-            // it.calendar.add()
+            Log.d(
+                TAG,
+                "on click " + it.calendar.getFormattedDate() + " " + it.calendar.getFormattedTime()
+            )
+            interactor.getHoursWithTasks(it.calendar.timeInMillis)
+                .subscribe(
+                    { list ->
+                        //  Log.d(TAG, "got hours = $list")
+                        list.forEach {
+                            if (it.tasks.isNotEmpty()) {
+                                Log.d(TAG, "Got hour with task = $it")
+                            }
+                        }
+                    },
+                    {
+                        Log.d(TAG, it.localizedMessage)
+                    }
+                )
         }
     }
 

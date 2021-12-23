@@ -1,5 +1,6 @@
 package com.example.verygoodtaskplanner.data.database
 
+import android.widget.ArrayAdapter
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -18,4 +19,6 @@ interface TaskDatabaseDAO {
     @Query("SELECT * FROM tasks")
     fun getAllTasks(): Single<List<Task>>
 
-}
+    @Query("SELECT * FROM tasks WHERE dateStart >= (:rangeStart) AND dateFinish <= (:rangeFinish)")
+    fun getTasksByRange(rangeStart: Long, rangeFinish: Long): Single<List<Task>>
+    }

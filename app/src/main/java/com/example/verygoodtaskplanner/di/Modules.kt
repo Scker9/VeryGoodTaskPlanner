@@ -2,6 +2,9 @@ package com.example.verygoodtaskplanner.di
 
 import androidx.room.Room
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
+import com.example.verygoodtaskplanner.data.repositories.TaskRepositoryImpl
+import com.example.verygoodtaskplanner.domain.HourInteractor
+import com.example.verygoodtaskplanner.presentation.repositories.TasksRepository
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import org.koin.core.component.KoinComponent
@@ -22,5 +25,9 @@ object Modules : KoinComponent {
         }
     }
     val repositories = module {
+        factory<TasksRepository> { TaskRepositoryImpl() }
+    }
+    val interactors = module {
+        factory { HourInteractor() }
     }
 }

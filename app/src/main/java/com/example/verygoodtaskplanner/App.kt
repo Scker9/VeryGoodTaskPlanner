@@ -1,6 +1,7 @@
 package com.example.verygoodtaskplanner
 
 import android.app.Application
+import com.example.verygoodtaskplanner.di.Modules.interactors
 import com.example.verygoodtaskplanner.di.Modules.repositories
 import com.example.verygoodtaskplanner.di.Modules.room
 import com.example.verygoodtaskplanner.di.Modules.router
@@ -12,7 +13,7 @@ class App:Application() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(listOf(router,repositories,room))
+            modules(listOf(router,repositories,room,interactors))
         }
     }
 }
