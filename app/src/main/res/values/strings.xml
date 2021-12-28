@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">VeryGoodTaskPlanner</string>
+    <string name="chooseTaskStart">Выберите начало:</string>
+    <string name="chooseTaskFinish">Выберите конец:</string>
+    <string name="chooseTaskName">Название:</string>
+    <string name="chooseTaskDescription">Описание задачи:</string>
+    <string name="createTaskButtonText">Создать!</string>
+    <string name="taskNameHint">Очень важная задача</string>
+    <string name="cancelTaskCreation">Отменить!</string>
 </resources>

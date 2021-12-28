@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/chooseStartTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/chooseTaskStart"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chooseFinishTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/chooseTaskFinish"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chooseStartTextView" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/textViewsGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="164dp" />
+
+    <Button
+        android:id="@+id/chooseStartDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_transparent"
+        android:textAllCaps="false"
+        android:textColor="@color/brick_red"
+        app:layout_constraintBaseline_toBaselineOf="@id/chooseStartTextView"
+        app:layout_constraintEnd_toStartOf="@id/chooseStartTimeButton"
+        app:layout_constraintStart_toStartOf="@id/textViewsGuideLine"
+        tools:text="25.12.2012 " />
+
+    <Button
+        android:id="@+id/chooseStartTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_transparent"
+        android:textColor="@color/brick_red"
+        app:layout_constraintBaseline_toBaselineOf="@id/chooseStartDateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chooseStartDateButton"
+        tools:text="13:00" />
+
+    <Button
+        android:id="@+id/chooseFinishDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_transparent"
+        android:textColor="@color/brick_red"
+        app:layout_constraintBaseline_toBaselineOf="@id/chooseFinishTextView"
+        app:layout_constraintEnd_toEndOf="@id/chooseStartDateButton"
+        app:layout_constraintStart_toStartOf="@id/chooseStartDateButton"
+        tools:text="26.12.2012 " />
+
+    <Button
+        android:id="@+id/chooseFinishTimeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_transparent"
+        android:textColor="@color/brick_red"
+        app:layout_constraintBaseline_toBaselineOf="@id/chooseFinishDateButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chooseFinishDateButton"
+        tools:text="15:00" />
+
+    <TextView
+        android:id="@+id/chooseTaskNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/chooseTaskName"
+        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chooseFinishTextView" />
+
+    <EditText
+        android:id="@+id/chooseTaskNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/taskNameHint"
+        android:inputType="text"
+        android:minHeight="48dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        app:layout_constraintBaseline_toBaselineOf="@id/chooseTaskNameTextView"
+        app:layout_constraintEnd_toEndOf="@id/chooseFinishTimeButton"
+        app:layout_constraintStart_toStartOf="@id/chooseStartDateButton" />
+
+    <TextView
+        android:id="@+id/taskDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:text="@string/chooseTaskDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chooseTaskNameTextView" />
+
+    <com.example.verygoodtaskplanner.presentation.customview.LinedEditText
+        android:id="@+id/taskDescriptionEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:maxLines="15"
+        android:scrollbars="vertical"
+        android:singleLine="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/taskDescriptionTextView" />
+
+    <Button
+        android:id="@+id/createTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/createTaskButtonText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/taskDescriptionEditText" />
+
+    <Button
+        android:id="@+id/cancelTaskCreationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/cancelTaskCreation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/taskDescriptionEditText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

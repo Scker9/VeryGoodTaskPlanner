@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.verygoodtaskplanner.data.entities.Task
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 
 @Dao
@@ -21,4 +22,4 @@ interface TaskDatabaseDAO {
 
     @Query("SELECT * FROM tasks WHERE dateStart >= (:rangeStart) AND dateFinish <= (:rangeFinish)")
     fun getTasksByRange(rangeStart: Long, rangeFinish: Long): Single<List<Task>>
-    }
+}

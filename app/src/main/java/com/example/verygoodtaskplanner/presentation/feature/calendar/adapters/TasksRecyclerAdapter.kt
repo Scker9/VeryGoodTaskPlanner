@@ -10,6 +10,7 @@ import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.data.entities.TimeRange
 
+//TODO() добавить диффутилс
 class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksViewHolder>() {
     private var items: ArrayList<Task> = arrayListOf()
 
@@ -20,7 +21,7 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
         fun bind(task: Task) {
             taskNameTextView.text = task.name
             taskDescriptionTextView.text = task.description
-            taskTimeRange.text=task.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
+            taskTimeRange.text = task.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
         }
     }
 

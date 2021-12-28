@@ -10,6 +10,7 @@ import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.TimeRange
 
+//TODO() добавить диффутилс
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
     private var items: ArrayList<Hour> = arrayListOf()
 
