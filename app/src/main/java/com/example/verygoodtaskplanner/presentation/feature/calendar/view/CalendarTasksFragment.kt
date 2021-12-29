@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.randomdog.presentation.base.BaseFragment
+import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
@@ -13,12 +14,15 @@ import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import moxy.presenter.InjectPresenter
+import org.koin.core.component.inject
 
 class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), CalendarTasksView {
     private val TAG = this::class.java.simpleName
     private val adapter by lazy { HourRecyclerAdapter() }
-
+    private val db by inject<TaskDatabase>()
     @InjectPresenter
     lateinit var presenter: CalendarTaskPresenter
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CalendarWithTasksBinding
@@ -30,6 +34,9 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
         val recyclerHour = binding.hourTaskRecycler
         binding.addTaskButton.setOnClickListener {
             CreateTaskDialogFragment().show(childFragmentManager, DIALOG_TAG)
+        }
+        binding.clearTasks.setOnClickListener {
+            db.taskDao().clearAllTasks().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe()
         }
         recyclerHour.adapter = adapter
         calendar.setOnDayClickListener {
@@ -46,7 +53,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
         fun newInstance(): CalendarTasksFragment = CalendarTasksFragment()
     }
 
-    override fun displayHours(tasks: ArrayList<Hour>) {
+    override fun displayDailyTasks(tasks: ArrayList<Hour>) {
         adapter.fillRecycler(tasks)
     }
 }

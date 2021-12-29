@@ -21,7 +21,7 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
         fun bind(task: Task) {
             taskNameTextView.text = task.name
             taskDescriptionTextView.text = task.description
-            taskTimeRange.text = task.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
+            taskTimeRange.text = task.getFormattedRange()
         }
     }
 

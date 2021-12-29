@@ -1,5 +1,6 @@
 package com.example.verygoodtaskplanner.data.repositories
 
+import com.example.verygoodtaskplanner.data.ADD_DAY
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
@@ -9,10 +10,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.koin.core.component.inject
 
+
 class TaskRepositoryImpl : TasksRepository {
     val database by inject<TaskDatabase>()
-    override fun getTasksByDay(timeStamp: Long): Single<ArrayList<Task>> {
-        return database.taskDao().getTasksByRange(timeStamp, timeStamp + ADD_DAY)
+    override fun getTasksByDayStart(dayStart: Long): Single<ArrayList<Task>> {
+        return database.taskDao().getTasksFilteredByStartDate(dayStart, dayStart + ADD_DAY)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .map {
                 it as ArrayList<Task> //TODO() исправить!
@@ -24,8 +26,12 @@ class TaskRepositoryImpl : TasksRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    companion object {
-        //TODO() объединить все константы
-        const val ADD_DAY = 86_400_000
+    override fun getAllTasks(): Single<ArrayList<Task>> {
+        return database.taskDao().getAllTasks().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map {
+                it as ArrayList<Task>
+            }
     }
+
 }

@@ -6,6 +6,7 @@ import io.reactivex.Single
 import org.koin.core.component.KoinComponent
 
 interface TasksRepository : KoinComponent {
-    fun getTasksByDay(timeStamp: Long): Single<ArrayList<Task>>
+    fun getTasksByDayStart(dayStart: Long): Single<ArrayList<Task>>
     fun addTaskToDataBase(task: Task): Completable
+    fun getAllTasks(): Single<ArrayList<Task>>
 }

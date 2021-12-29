@@ -3,6 +3,7 @@ package com.example.verygoodtaskplanner.domain.interactors
 import android.util.Log
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.data.entities.TimeRange
 import com.example.verygoodtaskplanner.domain.repositories.HourRepository
 import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
 import io.reactivex.Completable
@@ -19,11 +20,11 @@ class DailyTasksInteractor : KoinComponent {
 
     fun getHoursWithTasks(startOfDay: Long): Single<ArrayList<Hour>> {
         val hoursByDay = hourRepository.getDayHours(startOfDay)
-        return taskRepository.getTasksByDay(startOfDay).doOnSuccess {
+        return taskRepository.getTasksByDayStart(startOfDay).doOnSuccess {
             Log.d(TAG, "Got tasks by sql request $it")
             distributeTasksIntoHours(hoursByDay, it)
         }.map {
-            Log.d(TAG, hoursByDay.toString())
+            //  Log.d(TAG, hoursByDay.toString())
             hoursByDay
         }
     }
@@ -36,16 +37,26 @@ class DailyTasksInteractor : KoinComponent {
         listOfHours: ArrayList<Hour>,
         listOfTasks: ArrayList<Task>
     ) {
-        listOfHours.forEach { hour ->
-            listOfTasks.forEach { task ->
-                if (hour.dateStart <= task.dateStart && hour.dateFinish <= task.dateFinish) {
-                    hour.tasks.add(task)
-                    Log.d(TAG, "task added = $task")
+        if (listOfTasks.isNotEmpty()) {
+            listOfHours.forEach { hour ->
+                listOfTasks.forEach { task ->
+                    Log.d(
+                        TAG,
+                        "Hour : " + hour.getFormattedRange(TimeRange.ReturnType.TIME_ONLY) + " task  : " + task.getFormattedRange(
+                            TimeRange.ReturnType.TIME_ONLY
+                        )
+                    )
+                    if ((task.dateStart in hour.dateStart..hour.dateFinish)
+                        ||
+                        (task.dateStart <= hour.dateStart && hour.dateFinish <= task.dateFinish)
+                        ||
+                        (task.dateFinish in hour.dateStart..hour.dateFinish)
+                    ) {
+                        hour.tasks.add(task)
+                        //  Log.d(TAG, "task added = $task")
+                    }
                 }
             }
         }
     }
 }
-//00:00 - 00:59 start :1640638800000   stop: 1640642340000
-//
-// start:1640641800884  stop: 1640645400884

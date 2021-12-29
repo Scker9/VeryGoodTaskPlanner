@@ -18,7 +18,7 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
     fun getTasksByDay(day: Long) {
         interactor.getHoursWithTasks(day).subscribe(
             { hours ->
-                viewState.displayHours(hours)
+                viewState.displayDailyTasks(hours)
                 hours.map{ it.tasks }.forEach { task ->
                         if(task.isNotEmpty())
                         {
