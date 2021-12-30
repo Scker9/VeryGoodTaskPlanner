@@ -1,9 +1,6 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.dialog
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,21 +11,22 @@ import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskCreatorBinding
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
+import com.example.verygoodtaskplanner.presentation.base.TimeRangePicker
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.util.*
 
 //тут отходим от чистой архитектуры чуть-чуть...
-class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
+class CreateTaskDialogFragment : DialogFragment(), KoinComponent, TimeRangePicker {
     private val TAG = this::class.java.simpleName
-
+    var onTaskCreated: (() -> Unit)? = null
     private var _binding: TaskCreatorBinding? = null
     private val binding get() = _binding!!
 
     private val interactor by inject<DailyTasksInteractor>()
-    private val startCalendar = Calendar.getInstance()
-    private val finishCalendar = Calendar.getInstance()
+    override val startCalendar: Calendar = Calendar.getInstance()
+    override val finishCalendar: Calendar = Calendar.getInstance()
     private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +39,7 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = TaskCreatorBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -54,39 +52,16 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
         binding.chooseFinishTimeButton.text = finishCalendar.getFormattedTime()
         //установка даты и времени
         binding.chooseStartDateButton.setOnClickListener {
-            DatePickerDialog(
-                requireContext(),
-                getOnDataSetListener(ListenerType.START, startCalendar),
-                startCalendar.get(Calendar.YEAR),
-                startCalendar.get(Calendar.MONTH),
-                startCalendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            getDatePickerDialog(requireContext(), TimeRangePicker.ListenerType.START).show()
         }
         binding.chooseStartTimeButton.setOnClickListener {
-            TimePickerDialog(
-                requireContext(),
-                getOnTimeSetListener(ListenerType.START, startCalendar),
-                startCalendar.get(Calendar.HOUR_OF_DAY),
-                startCalendar.get(Calendar.MINUTE), true
-            ).show()
+            getTimePickerDialog(requireContext(), TimeRangePicker.ListenerType.START).show()
         }
         binding.chooseFinishDateButton.setOnClickListener {
-            DatePickerDialog(
-                requireContext(),
-                getOnDataSetListener(ListenerType.FINISH, finishCalendar),
-                finishCalendar.get(Calendar.YEAR),
-                finishCalendar.get(Calendar.MONTH),
-                finishCalendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            getDatePickerDialog(requireContext(), TimeRangePicker.ListenerType.FINISH).show()
         }
         binding.chooseFinishTimeButton.setOnClickListener {
-            TimePickerDialog(
-                requireContext(),
-                getOnTimeSetListener(ListenerType.FINISH, finishCalendar),
-                finishCalendar.get(Calendar.HOUR_OF_DAY),
-                finishCalendar.get(Calendar.MINUTE),
-                true
-            ).show()
+            getTimePickerDialog(requireContext(), TimeRangePicker.ListenerType.FINISH).show()
         }
         //кнопка создать
         binding.createTaskButton.setOnClickListener {
@@ -97,42 +72,22 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
         }
     }
 
-    private fun getOnDataSetListener(
-        type: ListenerType,
-        calendar: Calendar
-    ): DatePickerDialog.OnDateSetListener {
-        val listener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
-            calendar.set(Calendar.YEAR, year)
-            calendar.set(Calendar.MONTH, month)
-            calendar.set(Calendar.DAY_OF_MONTH, day)
-            onDateChanged(type, calendar)
-        }
-        return listener
-    }
 
-    private fun getOnTimeSetListener(
-        type: ListenerType,
-        calendar: Calendar
-    ): TimePickerDialog.OnTimeSetListener {
-        val listener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-            onTimeChanged(type, calendar)
-        }
-        return listener
-    }
-
-    private fun onDateChanged(type: ListenerType, calendar: Calendar) {
+    override fun onDateChanged(type: TimeRangePicker.ListenerType, calendar: Calendar) {
         when (type) {
-            ListenerType.START -> binding.chooseStartDateButton.text = calendar.getFormattedDate()
-            ListenerType.FINISH -> binding.chooseFinishDateButton.text = calendar.getFormattedDate()
+            TimeRangePicker.ListenerType.START -> binding.chooseStartDateButton.text =
+                calendar.getFormattedDate()
+            TimeRangePicker.ListenerType.FINISH -> binding.chooseFinishDateButton.text =
+                calendar.getFormattedDate()
         }
     }
 
-    private fun onTimeChanged(type: ListenerType, calendar: Calendar) {
+    override fun onTimeChanged(type: TimeRangePicker.ListenerType, calendar: Calendar) {
         when (type) {
-            ListenerType.START -> binding.chooseStartTimeButton.text = calendar.getFormattedTime()
-            ListenerType.FINISH -> binding.chooseFinishTimeButton.text = calendar.getFormattedTime()
+            TimeRangePicker.ListenerType.START -> binding.chooseStartTimeButton.text =
+                calendar.getFormattedTime()
+            TimeRangePicker.ListenerType.FINISH -> binding.chooseFinishTimeButton.text =
+                calendar.getFormattedTime()
         }
     }
 
@@ -149,18 +104,14 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
             .subscribe(
                 {
                     Toast.makeText(requireContext(), TASK_ADDED, Toast.LENGTH_SHORT).show()
+                    onTaskCreated?.invoke()
                     dismiss()
                 },
                 {
-                    Log.d(TAG, "Error task is not added!")
+                    Toast.makeText(requireContext(), TASK_NOT_ADDED, Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
             ))
-    }
-
-    enum class ListenerType {
-        START,
-        FINISH
     }
 
     override fun onDestroyView() {
@@ -171,5 +122,6 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent {
 
     companion object {
         const val TASK_ADDED = "Задача успешно добавлена!"
+        const val TASK_NOT_ADDED = "Что-то пошло не так..."
     }
 }

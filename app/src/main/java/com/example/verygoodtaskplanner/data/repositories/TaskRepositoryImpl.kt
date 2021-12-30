@@ -34,4 +34,9 @@ class TaskRepositoryImpl : TasksRepository {
             }
     }
 
+    override fun updateTask(task: Task): Completable {
+        return database.taskDao().updateTask(task).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 }

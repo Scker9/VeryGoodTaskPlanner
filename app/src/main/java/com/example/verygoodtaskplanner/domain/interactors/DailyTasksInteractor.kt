@@ -21,17 +21,15 @@ class DailyTasksInteractor : KoinComponent {
     fun getHoursWithTasks(startOfDay: Long): Single<ArrayList<Hour>> {
         val hoursByDay = hourRepository.getDayHours(startOfDay)
         return taskRepository.getTasksByDayStart(startOfDay).doOnSuccess {
-            Log.d(TAG, "Got tasks by sql request $it")
             distributeTasksIntoHours(hoursByDay, it)
         }.map {
-            //  Log.d(TAG, hoursByDay.toString())
             hoursByDay
         }
     }
 
-    fun addTask(task: Task): Completable {
-        return taskRepository.addTaskToDataBase(task)
-    }
+    fun addTask(task: Task): Completable = taskRepository.addTaskToDataBase(task)
+
+    fun updateTask(task: Task): Completable = taskRepository.updateTask(task)
 
     private fun distributeTasksIntoHours(
         listOfHours: ArrayList<Hour>,
@@ -40,12 +38,6 @@ class DailyTasksInteractor : KoinComponent {
         if (listOfTasks.isNotEmpty()) {
             listOfHours.forEach { hour ->
                 listOfTasks.forEach { task ->
-                    Log.d(
-                        TAG,
-                        "Hour : " + hour.getFormattedRange(TimeRange.ReturnType.TIME_ONLY) + " task  : " + task.getFormattedRange(
-                            TimeRange.ReturnType.TIME_ONLY
-                        )
-                    )
                     if ((task.dateStart in hour.dateStart..hour.dateFinish)
                         ||
                         (task.dateStart <= hour.dateStart && hour.dateFinish <= task.dateFinish)
@@ -53,10 +45,10 @@ class DailyTasksInteractor : KoinComponent {
                         (task.dateFinish in hour.dateStart..hour.dateFinish)
                     ) {
                         hour.tasks.add(task)
-                        //  Log.d(TAG, "task added = $task")
                     }
                 }
             }
         }
     }
+
 }

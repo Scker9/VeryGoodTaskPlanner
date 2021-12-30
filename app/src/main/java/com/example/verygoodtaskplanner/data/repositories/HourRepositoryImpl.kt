@@ -12,11 +12,7 @@ class HourRepositoryImpl : HourRepository {
             val startCalendar = Calendar.Builder().setInstant(startDate).build()
             startCalendar.set(Calendar.HOUR_OF_DAY, i)
             startCalendar.set(Calendar.MINUTE, 0)
-            listOfHours.add(
-                Hour(
-                    startCalendar.timeInMillis
-                )
-            )
+            listOfHours.add(Hour(startCalendar.timeInMillis))
         }
         return listOfHours
     }

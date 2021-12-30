@@ -13,12 +13,17 @@ import com.example.verygoodtaskplanner.data.entities.TimeRange
 //TODO() добавить диффутилс
 class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksViewHolder>() {
     private var items: ArrayList<Task> = arrayListOf()
+    var onItemClick: ((Task) -> Unit)? = null
 
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
-        val taskDescriptionTextView = itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
-        val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
+        private val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
+        private val taskDescriptionTextView =
+            itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
+        private val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
         fun bind(task: Task) {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(task)
+            }
             taskNameTextView.text = task.name
             taskDescriptionTextView.text = task.description
             taskTimeRange.text = task.getFormattedRange()

@@ -9,4 +9,5 @@ interface TasksRepository : KoinComponent {
     fun getTasksByDayStart(dayStart: Long): Single<ArrayList<Task>>
     fun addTaskToDataBase(task: Task): Completable
     fun getAllTasks(): Single<ArrayList<Task>>
+    fun updateTask(task: Task):Completable
 }

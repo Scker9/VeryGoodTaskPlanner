@@ -5,11 +5,14 @@
       <map>
         <entry key="..\:/Users/Alexander/Desktop/senior ilya/VeryGoodTaskPlanner-master/app/src/main/res/layout/calendar_with_tasks.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Alexander/Desktop/senior ilya/VeryGoodTaskPlanner-master/app/src/main/res/layout/task_creator.xml" value="0.136" />
+        <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/drawable/plus_button.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/calendar_with_tasks.xml" value="0.25" />
         <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/recycler_hour_item.xml" value="0.2578125" />
         <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/recycler_task_item.xml" value="0.33" />
         <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/task_creator.xml" value="0.25" />
+        <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/layout/task_editor.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Ilya/Desktop/VeryGoodTaskPlanner/app/src/main/res/menu/edit_task_menu.xml" value="0.1953125" />
       </map>
     </option>
   </component>

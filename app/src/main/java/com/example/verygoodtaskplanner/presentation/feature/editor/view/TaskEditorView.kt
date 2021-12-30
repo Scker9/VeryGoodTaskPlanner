@@ -1,12 +1,11 @@
-package com.example.verygoodtaskplanner.presentation.feature.calendar.view
+package com.example.verygoodtaskplanner.presentation.feature.editor.view
 
 import com.example.randomdog.presentation.base.BaseView
-import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface CalendarTasksView : BaseView {
-    fun displayDailyTasks(tasks: ArrayList<Hour>)
+interface TaskEditorView:BaseView {
+    fun displayTaskProperties()
 }

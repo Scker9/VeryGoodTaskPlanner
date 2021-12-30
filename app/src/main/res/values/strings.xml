@@ -4,7 +4,33 @@
     <string name="chooseTaskFinish">Выберите конец:</string>
     <string name="chooseTaskName">Название:</string>
     <string name="chooseTaskDescription">Описание задачи:</string>
-    <string name="createTaskButtonText">Создать!</string>
+    <string name="createTaskButtonText">Создать</string>
     <string name="taskNameHint">Очень важная задача</string>
-    <string name="cancelTaskCreation">Отменить!</string>
+    <string name="cancelTaskCreation">Отменить</string>
+    <string name="material_calendar_monday">Пн</string>
+    <string name="material_calendar_tuesday">Вт</string>
+    <string name="material_calendar_wednesday">Ср</string>
+    <string name="material_calendar_thursday">Чт</string>
+    <string name="material_calendar_friday">Пт</string>
+    <string name="material_calendar_saturday">Сб</string>
+    <string name="material_calendar_sunday">Вск</string>
+    <array name="material_calendar_months_array">
+        <item>Январь</item>
+        <item>Февраль</item>
+        <item>Март</item>
+        <item>Апрель</item>
+        <item>Май</item>
+        <item>Июнь</item>
+        <item>Июль</item>
+        <item>Август</item>
+        <item>Сентябрь</item>
+        <item>Октябрь</item>
+        <item>Ноябрь</item>
+        <item>Декабрь</item>
+    </array>
+
+    <string name="material_calendar_today_button">Today</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancel</string>
+    <string name="delete_task">Удалить задачу</string>
 </resources>
