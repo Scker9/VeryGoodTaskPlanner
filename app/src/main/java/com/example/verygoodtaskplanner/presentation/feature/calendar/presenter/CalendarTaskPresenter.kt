@@ -12,7 +12,10 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
     private val TAG = this::class.java.simpleName
     private val interactor by inject<DailyTasksInteractor>()
     override fun onFirstViewAttach() {
-        getTasksByDay(Calendar.getInstance().timeInMillis)
+        val calendar = Calendar.getInstance()
+        //выставляем начало текущего дня
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        getTasksByDay(calendar.timeInMillis)
         super.onFirstViewAttach()
     }
 
@@ -20,11 +23,6 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
         interactor.getHoursWithTasks(day).subscribe(
             { hours ->
                 viewState.displayDailyTasks(hours)
-                hours.map { it.tasks }.forEach { task ->
-                    if (task.isNotEmpty()) {
-                        Log.d(TAG, " Got " + task.toString())
-                    }
-                }
             },
             {
                 Log.d(TAG, it.localizedMessage)

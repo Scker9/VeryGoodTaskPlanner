@@ -1,5 +1,12 @@
 package com.example.randomdog.presentation.base
 
 import moxy.MvpView
-//@StateStrategyType определяют наследники
-interface BaseView : MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
+
+@StateStrategyType(AddToEndSingleStrategy::class)
+interface BaseView : MvpView {
+    fun onError(errorMessage: String) {
+
+    }
+}

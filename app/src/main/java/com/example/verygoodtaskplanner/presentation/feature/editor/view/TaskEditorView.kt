@@ -6,6 +6,6 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface TaskEditorView:BaseView {
-    fun displayTaskProperties()
+interface TaskEditorView : BaseView {
+    fun onSuccess(message: String, didTaskChanged: Boolean)
 }

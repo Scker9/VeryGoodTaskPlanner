@@ -11,11 +11,19 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
-        app:menu="@menu/edit_task_menu"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:menu="@menu/edit_task_menu"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <EditText
+            android:id="@+id/chooseTaskNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/taskNameHint" />
+    </androidx.appcompat.widget.Toolbar>
+
 
     <TextView
         android:id="@+id/chooseStartTextView"
@@ -93,30 +101,6 @@
         app:layout_constraintStart_toEndOf="@id/chooseFinishDateButton"
         tools:text="15:00" />
 
-    <TextView
-        android:id="@+id/chooseTaskNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:text="@string/chooseTaskName"
-        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chooseFinishTextView" />
-
-    <EditText
-        android:id="@+id/chooseTaskNameEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/taskNameHint"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        app:layout_constraintBaseline_toBaselineOf="@id/chooseTaskNameTextView"
-        app:layout_constraintEnd_toEndOf="@id/chooseFinishTimeButton"
-        app:layout_constraintStart_toStartOf="@id/chooseStartDateButton" />
 
     <TextView
         android:id="@+id/taskDescriptionTextView"
@@ -126,15 +110,14 @@
         android:text="@string/chooseTaskDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chooseTaskNameTextView" />
+        app:layout_constraintTop_toBottomOf="@id/chooseFinishTextView" />
 
     <com.example.verygoodtaskplanner.presentation.customview.LinedEditText
         android:id="@+id/taskDescriptionEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:lines="20"
         android:scrollbars="vertical"
         android:singleLine="false"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,6 +125,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/taskDescriptionTextView"
         app:layout_constraintVertical_bias="0" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foregroundGravity="right">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/saveEditedTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:clickable="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

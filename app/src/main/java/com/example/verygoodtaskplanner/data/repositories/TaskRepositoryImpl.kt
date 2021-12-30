@@ -39,4 +39,9 @@ class TaskRepositoryImpl : TasksRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    override fun deleteTaskById(id: Long): Completable {
+        return database.taskDao().deleteTaskById(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 }

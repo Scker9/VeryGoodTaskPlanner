@@ -11,7 +11,7 @@ import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskCreatorBinding
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
-import com.example.verygoodtaskplanner.presentation.base.TimeRangePicker
+import com.example.verygoodtaskplanner.presentation.base.time.TimeRangePicker
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -52,16 +52,16 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent, TimeRangePicke
         binding.chooseFinishTimeButton.text = finishCalendar.getFormattedTime()
         //установка даты и времени
         binding.chooseStartDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.ListenerType.START).show()
+            getDatePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
         }
         binding.chooseStartTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.ListenerType.START).show()
+            getTimePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
         }
         binding.chooseFinishDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.ListenerType.FINISH).show()
+            getDatePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
         }
         binding.chooseFinishTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.ListenerType.FINISH).show()
+            getTimePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
         }
         //кнопка создать
         binding.createTaskButton.setOnClickListener {
@@ -73,20 +73,20 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent, TimeRangePicke
     }
 
 
-    override fun onDateChanged(type: TimeRangePicker.ListenerType, calendar: Calendar) {
+    override fun onDateChanged(type: TimeRangePicker.Type, calendar: Calendar) {
         when (type) {
-            TimeRangePicker.ListenerType.START -> binding.chooseStartDateButton.text =
+            TimeRangePicker.Type.START -> binding.chooseStartDateButton.text =
                 calendar.getFormattedDate()
-            TimeRangePicker.ListenerType.FINISH -> binding.chooseFinishDateButton.text =
+            TimeRangePicker.Type.FINISH -> binding.chooseFinishDateButton.text =
                 calendar.getFormattedDate()
         }
     }
 
-    override fun onTimeChanged(type: TimeRangePicker.ListenerType, calendar: Calendar) {
+    override fun onTimeChanged(type: TimeRangePicker.Type, calendar: Calendar) {
         when (type) {
-            TimeRangePicker.ListenerType.START -> binding.chooseStartTimeButton.text =
+            TimeRangePicker.Type.START -> binding.chooseStartTimeButton.text =
                 calendar.getFormattedTime()
-            TimeRangePicker.ListenerType.FINISH -> binding.chooseFinishTimeButton.text =
+            TimeRangePicker.Type.FINISH -> binding.chooseFinishTimeButton.text =
                 calendar.getFormattedTime()
         }
     }

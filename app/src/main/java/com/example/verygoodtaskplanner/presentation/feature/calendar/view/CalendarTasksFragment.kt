@@ -13,6 +13,7 @@ import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
+import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorFragment
 import com.github.terrakok.cicerone.Router
 import moxy.presenter.InjectPresenter
 import org.koin.core.component.inject
@@ -29,11 +30,14 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        router.setResultListener(TaskEditorFragment.SAVING_RESULT_KEY)
+        {
+            if (it as Boolean) {
+                presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)
+            }
+        }
         val calendar = binding.calendarView
         val recyclerHour = binding.hourTaskRecycler
-        recyclerHour.setOnClickListener {
-            Log.d(TAG, "214rf[safoiaskjfasfnafsn")
-        }
         adapter.onTaskClicked =
             {
                 navigateToEditor(it)

@@ -7,9 +7,35 @@ import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEdit
 import org.koin.core.component.inject
 
 class TaskEditorPresenter : BasePresenter<TaskEditorView>() {
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        viewState.displayTaskProperties()
+    private val dailyTasksInteractor by inject<DailyTasksInteractor>()
+    fun deleteTask(id: Long) {
+        dailyTasksInteractor.deleteTaskById(id).subscribe(
+            {
+                viewState.onSuccess(TASK_DELETED,true)
+            },
+            {
+                viewState.onError(it.localizedMessage)
+            }
+        ).addToCompositeDisposable()
     }
-    val DailyTasksInteractor by inject<DailyTasksInteractor>()
+
+    fun saveChanges(oldTask: Task, newTask: Task) {
+        if (oldTask != newTask) {
+            dailyTasksInteractor.updateTask(newTask).subscribe(
+                {
+                    viewState.onSuccess(TASK_SAVED, true)
+                },
+                {
+                    viewState.onError(it.localizedMessage)
+                }
+            ).addToCompositeDisposable()
+        } else {
+            viewState.onSuccess(TASK_SAVED, false)
+        }
+    }
+
+    companion object {
+        const val TASK_SAVED = "Изменения сохранены!"
+        const val TASK_DELETED = "Задача удалена!"
+    }
 }

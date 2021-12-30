@@ -31,6 +31,8 @@ class DailyTasksInteractor : KoinComponent {
 
     fun updateTask(task: Task): Completable = taskRepository.updateTask(task)
 
+    fun deleteTaskById(id: Long): Completable = taskRepository.deleteTaskById(id)
+
     private fun distributeTasksIntoHours(
         listOfHours: ArrayList<Hour>,
         listOfTasks: ArrayList<Task>

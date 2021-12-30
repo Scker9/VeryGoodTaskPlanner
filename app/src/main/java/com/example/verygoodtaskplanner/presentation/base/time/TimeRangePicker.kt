@@ -1,4 +1,4 @@
-package com.example.verygoodtaskplanner.presentation.base
+package com.example.verygoodtaskplanner.presentation.base.time
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -9,13 +9,13 @@ interface TimeRangePicker {
     val startCalendar: Calendar
     val finishCalendar: Calendar
 
-    fun onDateChanged(type: ListenerType, calendar: Calendar)
-    fun onTimeChanged(type: ListenerType, calendar: Calendar)
+    fun onDateChanged(type: Type, calendar: Calendar)
+    fun onTimeChanged(type: Type, calendar: Calendar)
 
-    fun getDatePickerDialog(context: Context, type: ListenerType): DatePickerDialog {
+    fun getDatePickerDialog(context: Context, type: Type): DatePickerDialog {
         val calendar = when (type) {
-            ListenerType.FINISH -> finishCalendar
-            ListenerType.START -> startCalendar
+            Type.FINISH -> finishCalendar
+            Type.START -> startCalendar
         }
         return DatePickerDialog(
             context,
@@ -26,10 +26,10 @@ interface TimeRangePicker {
         )
     }
 
-    fun getTimePickerDialog(context: Context, type: ListenerType): TimePickerDialog {
+    fun getTimePickerDialog(context: Context, type: Type): TimePickerDialog {
         val calendar = when (type) {
-            ListenerType.FINISH -> finishCalendar
-            ListenerType.START -> startCalendar
+            Type.FINISH -> finishCalendar
+            Type.START -> startCalendar
         }
         return TimePickerDialog(
             context,
@@ -41,7 +41,7 @@ interface TimeRangePicker {
     }
 
     private fun getOnDataSetListener(
-        type: ListenerType,
+        type: Type,
         calendar: Calendar
     ): DatePickerDialog.OnDateSetListener {
         val listener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
@@ -54,7 +54,7 @@ interface TimeRangePicker {
     }
 
     private fun getOnTimeSetListener(
-        type: ListenerType,
+        type: Type,
         calendar: Calendar
     ): TimePickerDialog.OnTimeSetListener {
         val listener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
@@ -65,7 +65,7 @@ interface TimeRangePicker {
         return listener
     }
 
-    enum class ListenerType {
+    enum class Type {
         START,
         FINISH
     }
