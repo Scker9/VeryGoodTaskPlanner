@@ -40,38 +40,41 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView, Ti
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayTaskProperties()
-        //установка даты и времени
-        binding.chooseStartDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
-        }
-        binding.chooseStartTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
-        }
-        binding.chooseFinishDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
-        }
-        binding.chooseFinishTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
-        }
-        binding.saveEditedTask.setOnClickListener {
-            presenter.saveChanges(
-                oldTask = task!!,
-                newTask = Task(
-                    startCalendar.timeInMillis,
-                    finishCalendar.timeInMillis,
-                    binding.chooseTaskNameEditText.text.toString(),
-                    binding.taskDescriptionEditText.text.toString(),
-                    task!!.id
-                )
-            )
-        }
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.action_delete_task -> {
-                    presenter.deleteTask(task!!.id!!)
-                }
+        with(binding)
+        {
+            //установка даты и времени
+            chooseStartDateButton.setOnClickListener {
+                getDatePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
             }
-            return@setOnMenuItemClickListener true
+            chooseStartTimeButton.setOnClickListener {
+                getTimePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
+            }
+            chooseFinishDateButton.setOnClickListener {
+                getDatePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
+            }
+            chooseFinishTimeButton.setOnClickListener {
+                getTimePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
+            }
+            saveEditedTask.setOnClickListener {
+                presenter.saveChanges(
+                    oldTask = task!!,
+                    newTask = Task(
+                        startCalendar.timeInMillis,
+                        finishCalendar.timeInMillis,
+                        binding.chooseTaskNameEditText.text.toString(),
+                        binding.taskDescriptionEditText.text.toString(),
+                        task!!.id
+                    )
+                )
+            }
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_delete_task -> {
+                        presenter.deleteTask(task!!.id!!)
+                    }
+                }
+                return@setOnMenuItemClickListener true
+            }
         }
     }
 

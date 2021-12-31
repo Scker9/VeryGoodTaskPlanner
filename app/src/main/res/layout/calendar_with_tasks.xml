@@ -15,15 +15,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:type="one_day_picker" />
 
-
-    <Button
-        android:id="@+id/clearTasks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear task"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hourTaskRecycler"
         android:layout_width="match_parent"

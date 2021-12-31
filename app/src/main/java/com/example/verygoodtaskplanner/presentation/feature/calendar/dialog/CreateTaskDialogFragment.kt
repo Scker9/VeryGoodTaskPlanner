@@ -4,35 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.DialogFragment
-import com.example.verygoodtaskplanner.data.entities.Task
-import com.example.verygoodtaskplanner.data.getFormattedDate
-import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskCreatorBinding
-import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
-import com.example.verygoodtaskplanner.presentation.base.time.TimeRangePicker
-import io.reactivex.disposables.CompositeDisposable
+import com.example.verygoodtaskplanner.presentation.utils.CalendarType
+import com.example.verygoodtaskplanner.presentation.utils.DatePickerRange
+import com.example.verygoodtaskplanner.presentation.utils.TimePickerRange
+import moxy.MvpAppCompatDialogFragment
+import moxy.presenter.InjectPresenter
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.util.*
 
-//тут отходим от чистой архитектуры чуть-чуть...
-class CreateTaskDialogFragment : DialogFragment(), KoinComponent, TimeRangePicker {
+class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, CreateTaskDialogView {
     private val TAG = this::class.java.simpleName
     var onTaskCreated: (() -> Unit)? = null
     private var _binding: TaskCreatorBinding? = null
     private val binding get() = _binding!!
+    private val datePickerRange by lazy {
+        DatePickerRange(
+            requireContext(),
+            startCalendar = timePickerRange.startCalendar,
+            finishCalendar = timePickerRange.finishCalendar //чтобы число совпадало если задача начинается в 23:00 и выше
+        )
+    }
+    private val timePickerRange by lazy { TimePickerRange(requireContext()) }
 
-    private val interactor by inject<DailyTasksInteractor>()
-    override val startCalendar: Calendar = Calendar.getInstance()
-    override val finishCalendar: Calendar = Calendar.getInstance()
-    private val disposable = CompositeDisposable()
+    @InjectPresenter
+    lateinit var presenter: CreateTaskDialogPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        timePickerRange.finishCalendar.set(
+            Calendar.HOUR_OF_DAY,
+            timePickerRange.startCalendar.get(Calendar.HOUR_OF_DAY) + 1
+        )
+        timePickerRange.onTimeChanged =
+            { type, calendar ->
+                presenter.displayNewTime(type, calendar)
+            }
         //по умолчанию конец задачи на час больше
-        finishCalendar.set(Calendar.HOUR_OF_DAY, startCalendar.get(Calendar.HOUR_OF_DAY) + 1)
+        datePickerRange.onDateChanged =
+            { type, calendar ->
+                presenter.displayNewDate(type, calendar)
+            }
     }
 
     override fun onCreateView(
@@ -45,78 +57,66 @@ class CreateTaskDialogFragment : DialogFragment(), KoinComponent, TimeRangePicke
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //начальные значения
-        binding.chooseStartDateButton.text = startCalendar.getFormattedDate()
-        binding.chooseStartTimeButton.text = startCalendar.getFormattedTime()
-        binding.chooseFinishDateButton.text = finishCalendar.getFormattedDate()
-        binding.chooseFinishTimeButton.text = finishCalendar.getFormattedTime()
-        //установка даты и времени
-        binding.chooseStartDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
-        }
-        binding.chooseStartTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
-        }
-        binding.chooseFinishDateButton.setOnClickListener {
-            getDatePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
-        }
-        binding.chooseFinishTimeButton.setOnClickListener {
-            getTimePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
-        }
-        //кнопка создать
-        binding.createTaskButton.setOnClickListener {
-            addTaskAndCloseDialog()
-        }
-        binding.cancelTaskCreationButton.setOnClickListener {
-            dismiss()
+        showDefaultTimeAndDate()
+        with(binding)
+        {
+            //начальные значения
+            //установка даты и времени
+            chooseStartDateButton.setOnClickListener {
+                presenter.createAndShowDateDialog(CalendarType.START)
+            }
+            chooseStartTimeButton.setOnClickListener {
+                presenter.createAndShowTimeDialog(CalendarType.START)
+            }
+            chooseFinishDateButton.setOnClickListener {
+                presenter.createAndShowDateDialog(CalendarType.FINISH)
+            }
+            chooseFinishTimeButton.setOnClickListener {
+                presenter.createAndShowTimeDialog(CalendarType.FINISH)
+            }
+            //кнопка создать
+            createTaskButton.setOnClickListener {
+                //  presenter.addTaskAndCloseDialog()
+            }
+            cancelTaskCreationButton.setOnClickListener {
+                dismiss()
+            }
         }
     }
 
+    override fun showDateDialog(type: CalendarType) {
+        datePickerRange.getDatePickerDialog(type).show()
+    }
 
-    override fun onDateChanged(type: TimeRangePicker.Type, calendar: Calendar) {
+    override fun showTimeDialog(type: CalendarType) {
+        timePickerRange.getTimePickerDialog(type).show()
+    }
+
+    override fun updateDate(type: CalendarType, date: String) {
         when (type) {
-            TimeRangePicker.Type.START -> binding.chooseStartDateButton.text =
-                calendar.getFormattedDate()
-            TimeRangePicker.Type.FINISH -> binding.chooseFinishDateButton.text =
-                calendar.getFormattedDate()
+            CalendarType.START -> binding.chooseStartDateButton.text = date
+            CalendarType.FINISH -> binding.chooseFinishDateButton.text = date
         }
     }
 
-    override fun onTimeChanged(type: TimeRangePicker.Type, calendar: Calendar) {
+    override fun updateTime(type: CalendarType, time: String) {
         when (type) {
-            TimeRangePicker.Type.START -> binding.chooseStartTimeButton.text =
-                calendar.getFormattedTime()
-            TimeRangePicker.Type.FINISH -> binding.chooseFinishTimeButton.text =
-                calendar.getFormattedTime()
+            CalendarType.START -> binding.chooseStartTimeButton.text = time
+            CalendarType.FINISH -> binding.chooseFinishTimeButton.text = time
         }
     }
 
-    private fun addTaskAndCloseDialog() {
-        disposable.add(interactor.addTask(
-            Task
-                (
-                startCalendar.timeInMillis,
-                finishCalendar.timeInMillis,
-                binding.chooseTaskNameEditText.text.toString(),
-                binding.taskDescriptionEditText.text.toString()
-            )
-        )
-            .subscribe(
-                {
-                    Toast.makeText(requireContext(), TASK_ADDED, Toast.LENGTH_SHORT).show()
-                    onTaskCreated?.invoke()
-                    dismiss()
-                },
-                {
-                    Toast.makeText(requireContext(), TASK_NOT_ADDED, Toast.LENGTH_SHORT).show()
-                    dismiss()
-                }
-            ))
+    private fun showDefaultTimeAndDate() {
+        //важно, что сначала время, т.к дата зависит от времени
+        presenter.displayNewTime(CalendarType.START, timePickerRange.startCalendar)
+        presenter.displayNewTime(CalendarType.FINISH, timePickerRange.finishCalendar)
+        presenter.displayNewDate(CalendarType.START, datePickerRange.startCalendar)
+        presenter.displayNewDate(CalendarType.FINISH, datePickerRange.finishCalendar)
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
-        disposable.dispose()
         _binding = null
     }
 

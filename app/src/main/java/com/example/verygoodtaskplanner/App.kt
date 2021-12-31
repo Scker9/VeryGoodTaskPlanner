@@ -8,12 +8,12 @@ import com.example.verygoodtaskplanner.di.Modules.router
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class App:Application() {
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
             androidContext(applicationContext)
-            modules(listOf(router,repositories,room,interactors))
+            modules(listOf(router, repositories, room, interactors))
         }
     }
 }
