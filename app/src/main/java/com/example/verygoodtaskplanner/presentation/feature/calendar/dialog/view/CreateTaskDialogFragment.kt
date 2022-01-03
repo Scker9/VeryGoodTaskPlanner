@@ -1,10 +1,17 @@
-package com.example.verygoodtaskplanner.presentation.feature.calendar.dialog
+package com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.verygoodtaskplanner.R
+import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
+import com.example.verygoodtaskplanner.data.getFormattedDate
+import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskCreatorBinding
+import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.presenter.CreateTaskDialogPresenter
 import com.example.verygoodtaskplanner.presentation.utils.CalendarType
 import com.example.verygoodtaskplanner.presentation.utils.DatePickerRange
 import com.example.verygoodtaskplanner.presentation.utils.TimePickerRange
@@ -14,7 +21,6 @@ import org.koin.core.component.KoinComponent
 import java.util.*
 
 class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, CreateTaskDialogView {
-    private val TAG = this::class.java.simpleName
     var onTaskCreated: (() -> Unit)? = null
     private var _binding: TaskCreatorBinding? = null
     private val binding get() = _binding!!
@@ -32,15 +38,12 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        timePickerRange.finishCalendar.set(
-            Calendar.HOUR_OF_DAY,
-            timePickerRange.startCalendar.get(Calendar.HOUR_OF_DAY) + 1
-        )
+        presenter.setDefaultTime()         //по умолчанию конец задачи на час больше
+        //коллбэки на установку даты и времени
         timePickerRange.onTimeChanged =
             { type, calendar ->
                 presenter.displayNewTime(type, calendar)
             }
-        //по умолчанию конец задачи на час больше
         datePickerRange.onDateChanged =
             { type, calendar ->
                 presenter.displayNewDate(type, calendar)
@@ -57,7 +60,7 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        showDefaultTimeAndDate()
+        presenter.displayDefault()
         with(binding)
         {
             //начальные значения
@@ -76,7 +79,20 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
             }
             //кнопка создать
             createTaskButton.setOnClickListener {
-                //  presenter.addTaskAndCloseDialog()
+                presenter.addTaskAndCloseDialog(
+                    Task(
+                        Calendar.getInstance().getByTimeAndDateCalendars(
+                            timePickerRange.startCalendar,
+                            datePickerRange.startCalendar
+                        ).timeInMillis,
+                        Calendar.getInstance().getByTimeAndDateCalendars(
+                            timePickerRange.finishCalendar,
+                            datePickerRange.finishCalendar
+                        ).timeInMillis,
+                        binding.chooseTaskNameEditText.text.toString(),
+                        binding.taskDescriptionEditText.text.toString()
+                    )
+                )
             }
             cancelTaskCreationButton.setOnClickListener {
                 dismiss()
@@ -106,22 +122,49 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
         }
     }
 
-    private fun showDefaultTimeAndDate() {
-        //важно, что сначала время, т.к дата зависит от времени
-        presenter.displayNewTime(CalendarType.START, timePickerRange.startCalendar)
-        presenter.displayNewTime(CalendarType.FINISH, timePickerRange.finishCalendar)
-        presenter.displayNewDate(CalendarType.START, datePickerRange.startCalendar)
-        presenter.displayNewDate(CalendarType.FINISH, datePickerRange.finishCalendar)
+    override fun showWhenCreated() {
+        updateDate(CalendarType.START, datePickerRange.startCalendar.getFormattedDate())
+        updateDate(CalendarType.FINISH, datePickerRange.finishCalendar.getFormattedDate())
+        updateTime(CalendarType.START, datePickerRange.startCalendar.getFormattedTime())
+        updateTime(CalendarType.FINISH, datePickerRange.finishCalendar.getFormattedTime())
     }
 
+    override fun makeDefaultTimeValue() {
+        timePickerRange.finishCalendar.set(
+            Calendar.HOUR_OF_DAY,
+            timePickerRange.startCalendar.get(Calendar.HOUR_OF_DAY) + 1
+        )
+    }
+
+    override fun onErrorNoClose(errorMessage: String) {
+        Toast.makeText(
+            requireContext(),
+            errorMessage,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onSuccess() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.task_created_success),
+            Toast.LENGTH_SHORT
+        ).show()
+        onTaskCreated?.invoke()
+        dismiss()
+    }
+
+    override fun onError(errorMessage: String) {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.task_creation_error, errorMessage),
+            Toast.LENGTH_SHORT
+        ).show()
+        dismiss()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        const val TASK_ADDED = "Задача успешно добавлена!"
-        const val TASK_NOT_ADDED = "Что-то пошло не так..."
     }
 }

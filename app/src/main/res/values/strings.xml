@@ -28,9 +28,10 @@
         <item>Ноябрь</item>
         <item>Декабрь</item>
     </array>
-
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
     <string name="delete_task">Удалить задачу</string>
+    <string name="task_created_success">Задача добавлена!</string>
+    <string name="task_creation_error">Что-то пошло не так:  %s </string>
 </resources>

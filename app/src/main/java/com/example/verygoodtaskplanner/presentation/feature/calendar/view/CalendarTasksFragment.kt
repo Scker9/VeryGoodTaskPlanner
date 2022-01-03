@@ -11,7 +11,7 @@ import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
-import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.CreateTaskDialogFragment
+import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
 import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorFragment
 import com.github.terrakok.cicerone.Router

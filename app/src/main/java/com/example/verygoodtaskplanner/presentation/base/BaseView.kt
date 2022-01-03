@@ -9,4 +9,11 @@ interface BaseView : MvpView {
     fun onError(errorMessage: String) {
 
     }
+
+    fun onSuccess(message: String) {
+
+    }
+    fun onSuccess() {
+
+    }
 }
