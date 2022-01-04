@@ -81,11 +81,11 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
             createTaskButton.setOnClickListener {
                 presenter.addTaskAndCloseDialog(
                     Task(
-                        Calendar.getInstance().getByTimeAndDateCalendars(
+                        Calendar.Builder().getByTimeAndDateCalendars(
                             timePickerRange.startCalendar,
                             datePickerRange.startCalendar
                         ).timeInMillis,
-                        Calendar.getInstance().getByTimeAndDateCalendars(
+                        Calendar.Builder().getByTimeAndDateCalendars(
                             timePickerRange.finishCalendar,
                             datePickerRange.finishCalendar
                         ).timeInMillis,

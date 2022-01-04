@@ -3,6 +3,7 @@ package com.example.verygoodtaskplanner.presentation.feature.calendar.presenter
 import android.util.Log
 import com.example.randomdog.presentation.base.BasePresenter
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.view.CalendarTasksView
 import com.github.terrakok.cicerone.Router
 import org.koin.core.component.inject
@@ -25,7 +26,7 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
                 viewState.displayDailyTasks(hours)
             },
             {
-                Log.d(TAG, it.localizedMessage)
+                viewState.onError(it.localizedMessage)
             }
         ).addToCompositeDisposable()
     }

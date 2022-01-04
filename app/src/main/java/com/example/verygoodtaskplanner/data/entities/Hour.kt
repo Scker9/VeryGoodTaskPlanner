@@ -8,5 +8,4 @@ data class Hour(
     var tasks: ArrayList<Task> = arrayListOf()
 ) : TimeRange() {
     constructor(dateStart: Long) : this(dateStart, dateStart + ADD_HOUR)
-
 }

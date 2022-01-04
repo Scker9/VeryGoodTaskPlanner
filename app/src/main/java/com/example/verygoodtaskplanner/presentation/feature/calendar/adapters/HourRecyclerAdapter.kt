@@ -11,33 +11,37 @@ import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.data.entities.TimeRange
+import com.example.verygoodtaskplanner.presentation.entities.HourUI
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 
 //TODO() добавить диффутилс
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
     private val TAG = this::class.java.simpleName
-    private var items: ArrayList<Hour> = arrayListOf()
-    var onTaskClicked: ((Task) -> Unit)? = null
+    private var items: List<HourUI> = listOf()
+    var onTaskClicked: ((TaskUI) -> Unit)? = null
 
     inner class HourViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val hourRangeTextView = itemView.findViewById<TextView>(R.id.timeTextView)
         private val taskRecycler = itemView.findViewById<RecyclerView>(R.id.taskRecycler)
-        fun bind(hour: Hour) {
+        fun bind(hourUI: HourUI) {
             val adapter = TasksRecyclerAdapter()
             adapter.setHasStableIds(true)
             adapter.onItemClick =
                 {
                     onTaskClicked?.invoke(it)
                 }
-            hourRangeTextView.text = hour.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
+            hourRangeTextView.text = hourUI.getFormattedRange(TimeRange.ReturnType.TIME_ONLY)
             taskRecycler.adapter = adapter
-            adapter.fillRecycler(hour.tasks)
+            adapter.fillRecycler(hourUI.tasks)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder =
-        HourViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
+        return HourViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.recycler_hour_item, parent, false)
         )
+    }
+
 
     override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
         holder.bind(items[position])
@@ -46,7 +50,7 @@ class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHol
     override fun getItemCount(): Int = items.count()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun fillRecycler(data: ArrayList<Hour>) {
+    fun fillRecycler(data: List<HourUI>) {
         items = data
         notifyDataSetChanged() //поправить под диф утилс
     }

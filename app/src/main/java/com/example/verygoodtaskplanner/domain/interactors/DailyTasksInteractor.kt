@@ -1,11 +1,13 @@
 package com.example.verygoodtaskplanner.domain.interactors
 
-import android.util.Log
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
-import com.example.verygoodtaskplanner.data.entities.TimeRange
+import com.example.verygoodtaskplanner.domain.mappers.HourToHourUIMapper
+import com.example.verygoodtaskplanner.domain.mappers.TaskToTaskUIMapper
 import com.example.verygoodtaskplanner.domain.repositories.HourRepository
 import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
+import com.example.verygoodtaskplanner.presentation.entities.HourUI
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.koin.core.component.KoinComponent
@@ -13,23 +15,25 @@ import org.koin.core.component.inject
 import kotlin.collections.ArrayList
 
 class DailyTasksInteractor : KoinComponent {
-    private val TAG = this::class.java.simpleName
-
     private val taskRepository by inject<TasksRepository>()
     private val hourRepository by inject<HourRepository>()
 
-    fun getHoursWithTasks(startOfDay: Long): Single<ArrayList<Hour>> {
+    fun getHoursWithTasks(startOfDay: Long): Single<List<HourUI>> {
         val hoursByDay = hourRepository.getDayHours(startOfDay)
         return taskRepository.getTasksByDayStart(startOfDay).doOnSuccess {
             distributeTasksIntoHours(hoursByDay, it)
         }.map {
-            hoursByDay
+            hoursByDay.map {
+                HourToHourUIMapper().convertHourToHourUI(it)
+            }
         }
     }
 
-    fun addTask(task: Task): Completable = taskRepository.addTaskToDataBase(task)
+    fun addTask(taskUI: TaskUI): Completable =
+        taskRepository.addTaskToDataBase(TaskToTaskUIMapper().convertTaskUIToTask(taskUI))
 
-    fun updateTask(task: Task): Completable = taskRepository.updateTask(task)
+    fun updateTask(taskUI: TaskUI): Completable =
+        taskRepository.updateTask(TaskToTaskUIMapper().convertTaskUIToTask(taskUI))
 
     fun deleteTaskById(id: Long): Completable = taskRepository.deleteTaskById(id)
 

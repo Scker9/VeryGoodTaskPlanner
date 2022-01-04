@@ -12,7 +12,7 @@ fun Calendar.getFormattedDate(): String =
         this.get(Calendar.YEAR)
     )
 
-fun Calendar.getByTimeAndDateCalendars(timeCalendar: Calendar, dateCalendar: Calendar): Calendar {
+fun Calendar.Builder.getByTimeAndDateCalendars(timeCalendar: Calendar, dateCalendar: Calendar): Calendar {
     return Calendar.Builder()
         .setTimeOfDay(
             timeCalendar.get(Calendar.HOUR_OF_DAY),

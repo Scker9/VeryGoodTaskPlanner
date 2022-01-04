@@ -10,6 +10,8 @@ import com.example.verygoodtaskplanner.Screens
 import com.example.verygoodtaskplanner.data.entities.Hour
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
+import com.example.verygoodtaskplanner.presentation.entities.HourUI
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
@@ -61,13 +63,12 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
         return dialog
     }
 
-    override fun displayDailyTasks(tasks: ArrayList<Hour>) {
+    override fun displayDailyTasks(tasks: List<HourUI>) {
         adapter.fillRecycler(tasks)
     }
 
-    private fun navigateToEditor(task: Task) {
-        Log.d(TAG, task.toString())
-        router.navigateTo(Screens.TASK_EDITOR(task))
+    private fun navigateToEditor(taskUI: TaskUI) {
+        router.navigateTo(Screens.TASK_EDITOR(taskUI))
     }
 
     companion object {
