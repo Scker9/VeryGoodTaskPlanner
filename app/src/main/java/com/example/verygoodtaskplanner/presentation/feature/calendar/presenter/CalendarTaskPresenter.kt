@@ -9,10 +9,8 @@ import java.util.*
 class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
     private val interactor by inject<DailyTasksInteractor>()
     override fun onFirstViewAttach() {
-        val calendar = Calendar.getInstance()
-        //выставляем начало текущего дня
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        getTasksByDay(calendar.timeInMillis)
+
+        getTasksByDay(getCurrentDateCalendar().timeInMillis)
         super.onFirstViewAttach()
     }
 
@@ -26,4 +24,15 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
             }
         ).addToCompositeDisposable()
     }
+
+    private fun getCurrentDateCalendar(): Calendar {
+        val calendar = Calendar.getInstance()
+        //выставляем начало текущего дня
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        return calendar
+    }
+
 }

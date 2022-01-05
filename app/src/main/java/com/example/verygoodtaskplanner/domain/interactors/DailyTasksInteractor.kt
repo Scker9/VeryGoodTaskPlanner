@@ -17,7 +17,6 @@ import kotlin.collections.ArrayList
 class DailyTasksInteractor : KoinComponent {
     private val taskRepository by inject<TasksRepository>()
     private val hourRepository by inject<HourRepository>()
-
     fun getHoursWithTasks(startOfDay: Long): Single<List<HourUI>> {
         val hoursByDay = hourRepository.getDayHours(startOfDay)
         return taskRepository.getTasksByDayStart(startOfDay).doOnSuccess {
@@ -44,11 +43,11 @@ class DailyTasksInteractor : KoinComponent {
         if (listOfTasks.isNotEmpty()) {
             listOfHours.forEach { hour ->
                 listOfTasks.forEach { task ->
-                    if ((task.dateStart in hour.dateStart..hour.dateFinish)
+                    if ((task.dateStart in hour.dateStart + 1 until hour.dateFinish)
                         ||
                         (task.dateStart <= hour.dateStart && hour.dateFinish <= task.dateFinish)
                         ||
-                        (task.dateFinish in hour.dateStart..hour.dateFinish)
+                        (task.dateFinish in hour.dateStart + 1 until hour.dateFinish)
                     ) {
                         hour.tasks.add(task)
                     }
@@ -56,5 +55,5 @@ class DailyTasksInteractor : KoinComponent {
             }
         }
     }
-
 }
+
