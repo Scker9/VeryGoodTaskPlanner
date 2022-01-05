@@ -8,7 +8,7 @@ import kotlin.collections.ArrayList
 class HourRepositoryImpl : HourRepository {
     override fun getDayHours(startDate: Long): ArrayList<Hour> {
         val listOfHours: ArrayList<Hour> = arrayListOf()
-        for (i in START_HOUR..END_HOUR) {
+        for (i in START_DAY_HOUR..END_DAY_HOUR) {
             val startCalendar = Calendar.Builder().setInstant(startDate).build()
             startCalendar.set(Calendar.HOUR_OF_DAY, i)
             startCalendar.set(Calendar.MINUTE, 0)
@@ -17,9 +17,8 @@ class HourRepositoryImpl : HourRepository {
         return listOfHours
     }
 
-    companion object
-    {
-        private const val START_HOUR=0
-        private const val END_HOUR=23
+    companion object {
+        private const val START_DAY_HOUR = 0
+        private const val END_DAY_HOUR = 23
     }
 }

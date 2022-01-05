@@ -12,7 +12,7 @@ import org.koin.core.component.inject
 
 
 class TaskRepositoryImpl : TasksRepository {
-    val database by inject<TaskDatabase>()
+    private val database by inject<TaskDatabase>()
     override fun getTasksByDayStart(dayStart: Long): Single<List<Task>> {
         return database.taskDao().getTasksFilteredByStartDate(dayStart, dayStart + ADD_DAY)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -23,12 +23,9 @@ class TaskRepositoryImpl : TasksRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getAllTasks(): Single<ArrayList<Task>> {
+    override fun getAllTasks(): Single<List<Task>> {
         return database.taskDao().getAllTasks().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it as ArrayList<Task>
-            }
     }
 
     override fun updateTask(task: Task): Completable {
@@ -40,5 +37,4 @@ class TaskRepositoryImpl : TasksRepository {
         return database.taskDao().deleteTaskById(id).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
 }

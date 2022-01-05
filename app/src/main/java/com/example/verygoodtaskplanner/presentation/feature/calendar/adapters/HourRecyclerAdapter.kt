@@ -44,7 +44,7 @@ class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHol
 
     override fun getItemCount(): Int = items.count()
 
-    class HourItemDiffCallback(
+    private class HourItemDiffCallback(
         private var oldHourList: List<HourUI>,
         private var newHourList: List<HourUI>
     ) :

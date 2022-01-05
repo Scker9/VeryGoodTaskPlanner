@@ -12,16 +12,18 @@ fun Calendar.getFormattedDate(): String =
         this.get(Calendar.YEAR)
     )
 
-fun Calendar.Builder.getByTimeAndDateCalendars(timeCalendar: Calendar, dateCalendar: Calendar): Calendar {
-    return Calendar.Builder()
-        .setTimeOfDay(
-            timeCalendar.get(Calendar.HOUR_OF_DAY),
-            timeCalendar.get(Calendar.MINUTE), 0
-        )
-        .setDate(
-            dateCalendar.get(Calendar.YEAR),
-            dateCalendar.get(Calendar.MONTH),
-            dateCalendar.get(Calendar.DAY_OF_MONTH)
-        )
-        .build()
+fun Calendar.Builder.getByTimeAndDateCalendars(
+    timeCalendar: Calendar,
+    dateCalendar: Calendar
+): Calendar {
+    this.setTimeOfDay(
+        timeCalendar.get(Calendar.HOUR_OF_DAY),
+        timeCalendar.get(Calendar.MINUTE), 0
+    )
+    this.setDate(
+        dateCalendar.get(Calendar.YEAR),
+        dateCalendar.get(Calendar.MONTH),
+        dateCalendar.get(Calendar.DAY_OF_MONTH)
+    )
+    return this.build()
 }

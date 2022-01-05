@@ -24,6 +24,7 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
     var onTaskCreated: (() -> Unit)? = null
     private var _binding: TaskCreatorBinding? = null
     private val binding get() = _binding!!
+    private val timePickerRange by lazy { TimePickerRange(requireContext()) }
     private val datePickerRange by lazy {
         DatePickerRange(
             requireContext(),
@@ -31,7 +32,6 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
             finishCalendar = timePickerRange.finishCalendar //чтобы число совпадало если задача начинается в 23:00 и выше
         )
     }
-    private val timePickerRange by lazy { TimePickerRange(requireContext()) }
 
     @InjectPresenter
     lateinit var presenter: CreateTaskDialogPresenter
@@ -158,7 +158,7 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
     override fun onError(resId: Int) {
         Toast.makeText(
             requireContext(),
-            getString(R.string.task_creation_error, getString(resId)),
+            getString(resId),
             Toast.LENGTH_SHORT
         ).show()
     }

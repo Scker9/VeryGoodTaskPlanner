@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.verygoodtaskplanner.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.Screens
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
@@ -26,6 +28,17 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
     lateinit var presenter: CalendarTaskPresenter
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CalendarWithTasksBinding
         get() = CalendarWithTasksBinding::inflate
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //doing nothing
+                }
+            })
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,6 +75,10 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
 
     override fun displayDailyTasks(tasks: List<HourUI>) {
         adapter.fillRecycler(tasks)
+    }
+
+    override fun onError(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToEditor(taskUI: TaskUI) {

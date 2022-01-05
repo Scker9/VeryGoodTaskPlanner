@@ -11,7 +11,6 @@ import org.koin.core.component.inject
 class CreateTaskDialogPresenter : TimeRangePresenter<CreateTaskDialogView>() {
     private val dailyTasksInteractor by inject<DailyTasksInteractor>()
 
-
     fun setDefaultTime() {
         viewState.makeDefaultTimeValue()
     }

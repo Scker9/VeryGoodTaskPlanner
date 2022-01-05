@@ -1,6 +1,5 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.adapters
 
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,15 +19,11 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
             itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
         private val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
         fun bind(taskUI: TaskUI) {
+            taskDescriptionTextView.visibility = View.GONE //по заданию не должно быть описания
             itemView.setOnClickListener {
                 onItemClick?.invoke(taskUI)
             }
             taskNameTextView.text = taskUI.name
-            if (taskUI.description.isBlank()) {
-                taskDescriptionTextView.visibility = View.GONE
-            } else {
-                taskDescriptionTextView.text = taskUI.description
-            }
             taskTimeRange.text = taskUI.getFormattedRange()
         }
     }
@@ -45,7 +40,10 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
 
     override fun getItemCount(): Int = items.count()
 
-    class TaskItemDiffCallback(var oldTaskList: List<TaskUI>, var newTaskList: List<TaskUI>) :
+    private class TaskItemDiffCallback(
+        private var oldTaskList: List<TaskUI>,
+        private var newTaskList: List<TaskUI>
+    ) :
         DiffUtil.Callback() {
         override fun getOldListSize(): Int = oldTaskList.count()
 

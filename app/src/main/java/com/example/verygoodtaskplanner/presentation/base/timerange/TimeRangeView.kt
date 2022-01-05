@@ -12,4 +12,5 @@ interface TimeRangeView : BaseView {
     fun updateDate(type: CalendarType, date: String)
     fun updateTime(type: CalendarType, time: String)
     fun showWhenCreated()
+    fun onError(resId: Int)
 }

@@ -6,19 +6,5 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface BaseView : MvpView {
-    fun onError(errorMessage: String) {
-
-    }
-
-    fun onError(resId: Int) {
-
-    }
-
-    fun onSuccess(message: String) {
-
-    }
-
-    fun onSuccess() {
-
-    }
+    fun onError(errorMessage: String)
 }
