@@ -1,6 +1,5 @@
 package com.example.verygoodtaskplanner.di
 
-import android.content.Context
 import androidx.room.Room
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.repositories.HourRepositoryImpl
@@ -8,7 +7,6 @@ import com.example.verygoodtaskplanner.data.repositories.TaskRepositoryImpl
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
 import com.example.verygoodtaskplanner.domain.repositories.HourRepository
 import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
-import com.example.verygoodtaskplanner.presentation.utils.DatePickerRange
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
 import org.koin.core.component.KoinComponent

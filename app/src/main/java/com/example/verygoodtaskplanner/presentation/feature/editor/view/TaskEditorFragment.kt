@@ -9,6 +9,7 @@ import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskEditorBinding
+import com.example.verygoodtaskplanner.presentation.Tags
 import com.example.verygoodtaskplanner.presentation.Tags.got_task_tag
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.editor.presenter.TaskEditorPresenter
@@ -106,7 +107,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
 
     override fun onSuccess(resId: Int, hasTaskChanged: Boolean) {
         Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
-        router.sendResult(getString(R.string.saving_result_key), hasTaskChanged)
+        router.sendResult(Tags.saving_result_key, hasTaskChanged)
         router.exit()
     }
 

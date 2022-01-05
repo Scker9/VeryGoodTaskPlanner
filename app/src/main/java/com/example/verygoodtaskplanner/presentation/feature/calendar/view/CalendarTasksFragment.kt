@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.verygoodtaskplanner.presentation.base.BaseFragment
-import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.Screens
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
+import com.example.verygoodtaskplanner.presentation.Tags
 import com.example.verygoodtaskplanner.presentation.Tags.task_creator_dialog
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
@@ -29,7 +29,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        router.setResultListener(getString(R.string.saving_result_key))
+        router.setResultListener(Tags.saving_result_key)
         {
             if (it as Boolean) {
                 presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)

@@ -1,7 +1,5 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.adapters
 
-import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.Hour
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.data.entities.TimeRange
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI

@@ -34,7 +34,6 @@
     <string name="delete_task">Удалить задачу</string>
     <string name="task_created_success">Задача добавлена!</string>
     <string name="task_creation_error">Ошибка:\n%s</string>
-    <string name="saving_result_key">task_manipulation</string>
     <string name="task_saved">Изменения сохранены!</string>
     <string name="task_deleted">Задача удалена!</string>
     <string name="error_end_more_than_start">Нельзя ставить заканчивать задачи в прошлом....</string>

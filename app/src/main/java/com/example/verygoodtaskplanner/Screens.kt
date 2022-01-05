@@ -1,6 +1,5 @@
 package com.example.verygoodtaskplanner
 
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.view.CalendarTasksFragment
 import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorFragment
