@@ -1,17 +1,18 @@
 package com.example.verygoodtaskplanner.presentation.feature.editor.presenter
 
-import com.example.randomdog.presentation.base.BasePresenter
-import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
+import com.example.verygoodtaskplanner.presentation.base.timerange.TimeRangePresenter
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorView
 import org.koin.core.component.inject
 
-class TaskEditorPresenter : BasePresenter<TaskEditorView>() {
+class TaskEditorPresenter : TimeRangePresenter<TaskEditorView>() {
     private val dailyTasksInteractor by inject<DailyTasksInteractor>()
     fun deleteTask(id: Long) {
         dailyTasksInteractor.deleteTaskById(id).subscribe(
             {
-                viewState.onSuccess(TASK_DELETED,true)
+                viewState.onSuccess(R.string.task_deleted, true)
             },
             {
                 viewState.onError(it.localizedMessage)
@@ -19,23 +20,29 @@ class TaskEditorPresenter : BasePresenter<TaskEditorView>() {
         ).addToCompositeDisposable()
     }
 
-    fun saveChanges(oldTask: Task, newTask: Task) {
-        if (oldTask != newTask) {
-            dailyTasksInteractor.updateTask(newTask).subscribe(
-                {
-                    viewState.onSuccess(TASK_SAVED, true)
-                },
-                {
-                    viewState.onError(it.localizedMessage)
+    fun saveChanges(oldTask: TaskUI, newTask: TaskUI) {
+        when (validateTask(newTask)) {
+            ValidationError.NO_ERROR ->
+                if (oldTask != newTask) {
+                    dailyTasksInteractor.updateTask(newTask)
+                        .subscribe(
+                            {
+                                viewState.onSuccess(R.string.task_saved, true)
+                            },
+                            {
+                                viewState.onError(it.localizedMessage)
+                            }
+                        ).addToCompositeDisposable()
+                } else {
+                    viewState.onSuccess(R.string.task_saved, false)
                 }
-            ).addToCompositeDisposable()
-        } else {
-            viewState.onSuccess(TASK_SAVED, false)
+            ValidationError.END_MORE_THAN_START -> viewState.onError(
+                R.string.error_end_more_than_start
+            )
+            ValidationError.NAME_IS_BLANK -> viewState.onError(
+                R.string.task_name_is_blank
+            )
         }
-    }
 
-    companion object {
-        const val TASK_SAVED = "Изменения сохранены!"
-        const val TASK_DELETED = "Задача удалена!"
     }
 }

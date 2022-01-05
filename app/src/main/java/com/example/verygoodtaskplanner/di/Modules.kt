@@ -18,6 +18,7 @@ object Modules : KoinComponent {
         single { get<Cicerone<Router>>().router }
         single { get<Cicerone<Router>>().getNavigatorHolder() }
     }
+
     val room = module {
         single {
             Room.databaseBuilder(
@@ -26,10 +27,12 @@ object Modules : KoinComponent {
             ).build()
         }
     }
+
     val repositories = module {
         factory<TasksRepository> { TaskRepositoryImpl() }
         factory<HourRepository> { HourRepositoryImpl() }
     }
+
     val interactors = module {
         factory { DailyTasksInteractor() }
     }

@@ -1,39 +1,38 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.Task
-import com.example.verygoodtaskplanner.data.entities.TimeRange
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 
-//TODO() добавить диффутилс
 class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksViewHolder>() {
-    private var items: ArrayList<Task> = arrayListOf()
-    var onItemClick: ((Task) -> Unit)? = null
+    private var items: ArrayList<TaskUI> = arrayListOf()
+    var onItemClick: ((TaskUI) -> Unit)? = null
 
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
         private val taskDescriptionTextView =
             itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
         private val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
-        fun bind(task: Task) {
+        fun bind(taskUI: TaskUI) {
+            taskDescriptionTextView.visibility = View.GONE //по заданию не должно быть описания
             itemView.setOnClickListener {
-                onItemClick?.invoke(task)
+                onItemClick?.invoke(taskUI)
             }
-            taskNameTextView.text = task.name
-            taskDescriptionTextView.text = task.description
-            taskTimeRange.text = task.getFormattedRange()
+            taskNameTextView.text = taskUI.name
+            taskTimeRange.text = taskUI.getFormattedRange()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder =
-        TasksViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
+        return TasksViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.recycler_task_item, parent, false)
         )
+    }
 
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
         holder.bind(items[position])
@@ -41,9 +40,30 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
 
     override fun getItemCount(): Int = items.count()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun fillRecycler(data: ArrayList<Task>) {
+    private class TaskItemDiffCallback(
+        private var oldTaskList: List<TaskUI>,
+        private var newTaskList: List<TaskUI>
+    ) :
+        DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldTaskList.count()
+
+        override fun getNewListSize(): Int = newTaskList.count()
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldTaskList[oldItemPosition].id == newTaskList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldTaskList[oldItemPosition] == newTaskList[newItemPosition]
+        }
+    }
+
+    fun fillRecycler(data: ArrayList<TaskUI>) {
+        val oldList = items
+        val diffResult = DiffUtil.calculateDiff(
+            TaskItemDiffCallback(oldList, data)
+        )
         items = data
-        notifyDataSetChanged() // поправить под диф утилы
+        diffResult.dispatchUpdatesTo(this)
     }
 }

@@ -1,25 +1,26 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.randomdog.presentation.base.BaseFragment
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import com.example.verygoodtaskplanner.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.Screens
-import com.example.verygoodtaskplanner.data.entities.Hour
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
+import com.example.verygoodtaskplanner.presentation.Tags
+import com.example.verygoodtaskplanner.presentation.Tags.task_creator_dialog
+import com.example.verygoodtaskplanner.presentation.entities.HourUI
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
-import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.CreateTaskDialogFragment
+import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
-import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorFragment
 import com.github.terrakok.cicerone.Router
 import moxy.presenter.InjectPresenter
 import org.koin.core.component.inject
 
 class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), CalendarTasksView {
-    private val TAG = this::class.java.simpleName
     private val adapter by lazy { HourRecyclerAdapter() }
     private val router by inject<Router>()
 
@@ -28,9 +29,20 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CalendarWithTasksBinding
         get() = CalendarWithTasksBinding::inflate
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    //doing nothing
+                }
+            })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        router.setResultListener(TaskEditorFragment.SAVING_RESULT_KEY)
+        router.setResultListener(Tags.saving_result_key)
         {
             if (it as Boolean) {
                 presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)
@@ -43,7 +55,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
                 navigateToEditor(it)
             }
         binding.addTaskButton.setOnClickListener {
-            createDialog().show(childFragmentManager, DIALOG_TAG)
+            createDialog().show(childFragmentManager, task_creator_dialog)
         }
         recyclerHour.adapter = adapter
         calendar.setOnDayClickListener {
@@ -61,17 +73,19 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
         return dialog
     }
 
-    override fun displayDailyTasks(tasks: ArrayList<Hour>) {
+    override fun displayDailyTasks(tasks: List<HourUI>) {
         adapter.fillRecycler(tasks)
     }
 
-    private fun navigateToEditor(task: Task) {
-        Log.d(TAG, task.toString())
-        router.navigateTo(Screens.TASK_EDITOR(task))
+    override fun onError(errorMessage: String) {
+        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun navigateToEditor(taskUI: TaskUI) {
+        router.navigateTo(Screens.TASK_EDITOR(taskUI))
     }
 
     companion object {
-        const val DIALOG_TAG = "CREATOR"
         fun newInstance(): CalendarTasksFragment = CalendarTasksFragment()
     }
 }

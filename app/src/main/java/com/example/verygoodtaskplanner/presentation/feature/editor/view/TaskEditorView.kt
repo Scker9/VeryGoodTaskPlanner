@@ -1,11 +1,10 @@
 package com.example.verygoodtaskplanner.presentation.feature.editor.view
 
-import com.example.randomdog.presentation.base.BaseView
-import com.example.verygoodtaskplanner.data.entities.Task
+import com.example.verygoodtaskplanner.presentation.base.timerange.TimeRangeView
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface TaskEditorView : BaseView {
-    fun onSuccess(message: String, didTaskChanged: Boolean)
+interface TaskEditorView : TimeRangeView {
+    fun onSuccess(resId: Int, hasTaskChanged: Boolean)
 }

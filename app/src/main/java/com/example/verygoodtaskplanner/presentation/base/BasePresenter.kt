@@ -1,4 +1,4 @@
-package com.example.randomdog.presentation.base
+package com.example.verygoodtaskplanner.presentation.base
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
