@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.entities.Hour
@@ -16,7 +17,6 @@ import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 
 //TODO() добавить диффутилс
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
-    private val TAG = this::class.java.simpleName
     private var items: List<HourUI> = listOf()
     var onTaskClicked: ((TaskUI) -> Unit)? = null
 
@@ -25,7 +25,6 @@ class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHol
         private val taskRecycler = itemView.findViewById<RecyclerView>(R.id.taskRecycler)
         fun bind(hourUI: HourUI) {
             val adapter = TasksRecyclerAdapter()
-            adapter.setHasStableIds(true)
             adapter.onItemClick =
                 {
                     onTaskClicked?.invoke(it)
@@ -49,9 +48,32 @@ class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHol
 
     override fun getItemCount(): Int = items.count()
 
-    @SuppressLint("NotifyDataSetChanged")
+    class HourItemDiffCallback(
+        private var oldHourList: List<HourUI>,
+        private var newHourList: List<HourUI>
+    ) :
+        DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldHourList.count()
+
+        override fun getNewListSize(): Int = newHourList.count()
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return (oldHourList[oldItemPosition].dateStart == newHourList[newItemPosition].dateStart
+                    &&
+                    oldHourList[oldItemPosition].dateFinish == newHourList[newItemPosition].dateFinish)
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldHourList[oldItemPosition] == newHourList[newItemPosition]
+        }
+    }
+
     fun fillRecycler(data: List<HourUI>) {
+        val oldList = items
+        val diffResult = DiffUtil.calculateDiff(
+            HourItemDiffCallback(oldList, data)
+        )
         items = data
-        notifyDataSetChanged() //поправить под диф утилс
+        diffResult.dispatchUpdatesTo(this)
     }
 }

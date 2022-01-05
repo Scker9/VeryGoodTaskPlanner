@@ -1,27 +1,24 @@
 package com.example.verygoodtaskplanner.presentation.feature.calendar.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.randomdog.presentation.base.BaseFragment
+import com.example.verygoodtaskplanner.presentation.base.BaseFragment
+import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.Screens
-import com.example.verygoodtaskplanner.data.entities.Hour
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
+import com.example.verygoodtaskplanner.presentation.Tags.task_creator_dialog
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view.CreateTaskDialogFragment
 import com.example.verygoodtaskplanner.presentation.feature.calendar.presenter.CalendarTaskPresenter
-import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorFragment
 import com.github.terrakok.cicerone.Router
 import moxy.presenter.InjectPresenter
 import org.koin.core.component.inject
 
 class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), CalendarTasksView {
-    private val TAG = this::class.java.simpleName
     private val adapter by lazy { HourRecyclerAdapter() }
     private val router by inject<Router>()
 
@@ -32,7 +29,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        router.setResultListener(TaskEditorFragment.SAVING_RESULT_KEY)
+        router.setResultListener(getString(R.string.saving_result_key))
         {
             if (it as Boolean) {
                 presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)
@@ -45,7 +42,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
                 navigateToEditor(it)
             }
         binding.addTaskButton.setOnClickListener {
-            createDialog().show(childFragmentManager, DIALOG_TAG)
+            createDialog().show(childFragmentManager, task_creator_dialog)
         }
         recyclerHour.adapter = adapter
         calendar.setOnDayClickListener {
@@ -72,7 +69,6 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
     }
 
     companion object {
-        const val DIALOG_TAG = "CREATOR"
         fun newInstance(): CalendarTasksFragment = CalendarTasksFragment()
     }
 }

@@ -3,14 +3,13 @@ package com.example.verygoodtaskplanner.presentation.feature.editor.view
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import com.example.randomdog.presentation.base.BaseFragment
+import com.example.verygoodtaskplanner.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskEditorBinding
-import com.example.verygoodtaskplanner.presentation.base.time.TimeRangePicker
+import com.example.verygoodtaskplanner.presentation.Tags.got_task_tag
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.editor.presenter.TaskEditorPresenter
 import com.example.verygoodtaskplanner.presentation.utils.CalendarType
@@ -47,16 +46,20 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        task = this.arguments?.getParcelable(TASK_TAG)
+        task = this.arguments?.getParcelable(got_task_tag)
+        timePickerRange.onTimeChanged =
+            { type, calendar ->
+                presenter.displayNewTime(type, calendar)
+            }
         datePickerRange.onDateChanged =
-            { calendarType, calendar ->
-
+            { type, calendar ->
+                presenter.displayNewDate(type, calendar)
             }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.displayTaskProperties()
+        presenter.displayDefault()
         with(binding)
         {
             //установка даты и времени
@@ -64,18 +67,18 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
                 datePickerRange.getDatePickerDialog(CalendarType.START).show()
             }
             chooseStartTimeButton.setOnClickListener {
-                // getTimePickerDialog(requireContext(), TimeRangePicker.Type.START).show()
+                timePickerRange.getTimePickerDialog(CalendarType.START).show()
             }
             chooseFinishDateButton.setOnClickListener {
-                // getDatePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
+                datePickerRange.getDatePickerDialog(CalendarType.FINISH).show()
             }
             chooseFinishTimeButton.setOnClickListener {
-                //  getTimePickerDialog(requireContext(), TimeRangePicker.Type.FINISH).show()
+                timePickerRange.getTimePickerDialog(CalendarType.FINISH).show()
             }
             saveEditedTask.setOnClickListener {
                 presenter.saveChanges(
                     oldTask = task!!,
-                    newTask = Task(
+                    newTask = TaskUI(
                         Calendar.Builder().getByTimeAndDateCalendars(
                             timePickerRange.startCalendar,
                             datePickerRange.startCalendar
@@ -85,7 +88,8 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
                             datePickerRange.finishCalendar
                         ).timeInMillis,
                         binding.chooseTaskNameEditText.text.toString(),
-                        binding.taskDescriptionEditText.text.toString()
+                        binding.taskDescriptionEditText.text.toString(),
+                        task!!.id
                     )
                 )
             }
@@ -100,23 +104,20 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
         }
     }
 
-    override fun onSuccess(message: String, hasTaskChanged: Boolean) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        router.sendResult(SAVING_RESULT_KEY, hasTaskChanged)
+    override fun onSuccess(resId: Int, hasTaskChanged: Boolean) {
+        Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+        router.sendResult(getString(R.string.saving_result_key), hasTaskChanged)
         router.exit()
     }
 
-    override fun showTaskProperties() {
-        with(binding)
-        {
-            chooseStartDateButton.text = datePickerRange.startCalendar.getFormattedDate()
-            chooseStartTimeButton.text = timePickerRange.startCalendar.getFormattedTime()
-            chooseFinishDateButton.text = datePickerRange.finishCalendar.getFormattedDate()
-            chooseFinishTimeButton.text = timePickerRange.finishCalendar.getFormattedTime()
-            chooseTaskNameEditText.setText(task?.name)
-            taskDescriptionEditText.setText(task?.description)
-        }
+    override fun showDateDialog(type: CalendarType) {
+        datePickerRange.getDatePickerDialog(type).show()
     }
+
+    override fun showTimeDialog(type: CalendarType) {
+        timePickerRange.getTimePickerDialog(type).show()
+    }
+
 
     override fun updateDate(type: CalendarType, date: String) {
         with(binding)
@@ -139,35 +140,27 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
         }
     }
 
+    override fun showWhenCreated() {
+        binding.taskDescriptionEditText.setText(task!!.description)
+        binding.chooseTaskNameEditText.setText(task!!.name)
+        updateDate(CalendarType.START, datePickerRange.startCalendar.getFormattedDate())
+        updateDate(CalendarType.FINISH, datePickerRange.finishCalendar.getFormattedDate())
+        updateTime(CalendarType.START, datePickerRange.startCalendar.getFormattedTime())
+        updateTime(CalendarType.FINISH, datePickerRange.finishCalendar.getFormattedTime())
+    }
+
     override fun onError(errorMessage: String) {
         Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-        router.exit()
     }
 
-    fun onDateChanged(type: TimeRangePicker.Type, calendar: Calendar) {
-        when (type) {
-            TimeRangePicker.Type.START -> binding.chooseStartDateButton.text =
-                calendar.getFormattedDate()
-            TimeRangePicker.Type.FINISH -> binding.chooseFinishDateButton.text =
-                calendar.getFormattedDate()
-        }
-    }
-
-    fun onTimeChanged(type: TimeRangePicker.Type, calendar: Calendar) {
-        when (type) {
-            TimeRangePicker.Type.START -> binding.chooseStartTimeButton.text =
-                calendar.getFormattedTime()
-            TimeRangePicker.Type.FINISH -> binding.chooseFinishTimeButton.text =
-                calendar.getFormattedTime()
-        }
+    override fun onError(resId: Int) {
+        Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
     }
 
     companion object {
-        const val SAVING_RESULT_KEY = "task_manipulation"
-        private const val TASK_TAG = "got_task"
         fun newInstance(taskUI: TaskUI): TaskEditorFragment {
             val bundle = Bundle()
-            bundle.putParcelable(TASK_TAG, taskUI)
+            bundle.putParcelable(got_task_tag, taskUI)
             val fragment = TaskEditorFragment()
             fragment.arguments = bundle
             return fragment

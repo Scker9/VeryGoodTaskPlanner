@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskCreatorBinding
+import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.presenter.CreateTaskDialogPresenter
 import com.example.verygoodtaskplanner.presentation.utils.CalendarType
 import com.example.verygoodtaskplanner.presentation.utils.DatePickerRange
@@ -80,7 +80,7 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
             //кнопка создать
             createTaskButton.setOnClickListener {
                 presenter.addTaskAndCloseDialog(
-                    Task(
+                    TaskUI(
                         Calendar.Builder().getByTimeAndDateCalendars(
                             timePickerRange.startCalendar,
                             datePickerRange.startCalendar
@@ -136,13 +136,6 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
         )
     }
 
-    override fun onErrorNoClose(errorMessage: String) {
-        Toast.makeText(
-            requireContext(),
-            errorMessage,
-            Toast.LENGTH_SHORT
-        ).show()
-    }
 
     override fun onSuccess() {
         Toast.makeText(
@@ -160,7 +153,14 @@ class CreateTaskDialogFragment : MvpAppCompatDialogFragment(), KoinComponent, Cr
             getString(R.string.task_creation_error, errorMessage),
             Toast.LENGTH_SHORT
         ).show()
-        dismiss()
+    }
+
+    override fun onError(resId: Int) {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.task_creation_error, getString(resId)),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun onDestroyView() {

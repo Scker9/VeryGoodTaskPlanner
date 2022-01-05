@@ -13,12 +13,9 @@ import org.koin.core.component.inject
 
 class TaskRepositoryImpl : TasksRepository {
     val database by inject<TaskDatabase>()
-    override fun getTasksByDayStart(dayStart: Long): Single<ArrayList<Task>> {
+    override fun getTasksByDayStart(dayStart: Long): Single<List<Task>> {
         return database.taskDao().getTasksFilteredByStartDate(dayStart, dayStart + ADD_DAY)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it as ArrayList<Task> //TODO() исправить!
-            }
     }
 
     override fun addTaskToDataBase(task: Task): Completable {

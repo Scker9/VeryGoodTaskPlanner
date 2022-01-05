@@ -39,7 +39,7 @@ class DailyTasksInteractor : KoinComponent {
 
     private fun distributeTasksIntoHours(
         listOfHours: ArrayList<Hour>,
-        listOfTasks: ArrayList<Task>
+        listOfTasks: List<Task>
     ) {
         if (listOfTasks.isNotEmpty()) {
             listOfHours.forEach { hour ->
