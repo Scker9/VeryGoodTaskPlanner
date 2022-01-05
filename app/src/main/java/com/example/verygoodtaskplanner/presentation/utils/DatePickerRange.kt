@@ -6,7 +6,7 @@ import java.util.*
 
 class DatePickerRange(
     context: Context,
-    var startCalendar:Calendar = Calendar.getInstance(),
+    var startCalendar: Calendar = Calendar.getInstance(),
     var finishCalendar: Calendar = Calendar.getInstance()
 ) : DatePickerDialog(context) {
     var onDateChanged: ((CalendarType, Calendar) -> Unit)? = null

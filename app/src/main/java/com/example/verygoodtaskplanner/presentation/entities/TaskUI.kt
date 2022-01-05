@@ -11,6 +11,4 @@ data class TaskUI(
     var name: String,
     var description: String,
     var id: Long? = null // при создании null, при редактировании не null
-) : TimeRange(), Parcelable {
-
-}
+) : TimeRange(), Parcelable
