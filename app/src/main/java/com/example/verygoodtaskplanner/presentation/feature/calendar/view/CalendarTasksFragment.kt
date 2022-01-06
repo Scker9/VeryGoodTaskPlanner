@@ -29,17 +29,6 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> CalendarWithTasksBinding
         get() = CalendarWithTasksBinding::inflate
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    //doing nothing
-                }
-            })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         router.setResultListener(Tags.saving_result_key)

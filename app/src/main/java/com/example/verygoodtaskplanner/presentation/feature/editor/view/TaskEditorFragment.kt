@@ -122,7 +122,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
                 closeEditor()
             }
             .setNegativeButton(R.string.no) { dialogInterface, _ ->
-                dialogInterface.dismiss()
+                dialogInterface.cancel()
             }.create().show()
     }
 
@@ -161,8 +161,12 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
     }
 
     override fun showWhenCreated() {
-        binding.taskDescriptionEditText.setText(task!!.description)
-        binding.chooseTaskNameEditText.setText(task!!.name)
+        with(binding)
+        {
+            taskDescriptionEditText.setText(task!!.description)
+            taskDescriptionEditText.setSelection(task!!.description.lastIndex)
+            chooseTaskNameEditText.setText(task!!.name)
+        }
         updateDate(CalendarType.START, datePickerRange.startCalendar.getFormattedDate())
         updateDate(CalendarType.FINISH, datePickerRange.finishCalendar.getFormattedDate())
         updateTime(CalendarType.START, datePickerRange.startCalendar.getFormattedTime())
