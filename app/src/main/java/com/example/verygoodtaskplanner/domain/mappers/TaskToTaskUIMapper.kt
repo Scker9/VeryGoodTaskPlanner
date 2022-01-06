@@ -17,9 +17,4 @@ class TaskToTaskUIMapper {
 
     fun convertTaskUIToTask(taskUI: TaskUI): Task =
         Task(taskUI.dateStart, taskUI.dateFinish, taskUI.name, taskUI.description, taskUI.id)
-
-    fun convertTaskUIToTask(tasksUI: List<TaskUI>): List<Task> {
-        return tasksUI.map { convertTaskUIToTask(it) }
-    }
-
 }

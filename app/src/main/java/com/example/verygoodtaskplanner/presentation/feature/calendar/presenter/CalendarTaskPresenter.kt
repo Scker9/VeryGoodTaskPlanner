@@ -7,7 +7,7 @@ import org.koin.core.component.inject
 import java.util.*
 
 class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
-    private val interactor by inject<DailyTasksInteractor>()
+    private val dailyTasksInteractor by inject<DailyTasksInteractor>()
     override fun onFirstViewAttach() {
 
         getTasksByDay(getCurrentDateCalendar().timeInMillis)
@@ -15,7 +15,7 @@ class CalendarTaskPresenter : BasePresenter<CalendarTasksView>() {
     }
 
     fun getTasksByDay(day: Long) {
-        interactor.getHoursWithTasks(day).subscribe(
+        dailyTasksInteractor.getHoursWithTasks(day).subscribe(
             { hours ->
                 viewState.displayDailyTasks(hours)
             },

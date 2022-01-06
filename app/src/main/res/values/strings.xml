@@ -41,5 +41,7 @@
     <string name="are_you_sure_changes_is_not_saved">Все изменения будут потеряны, вы уверены, что хотите выйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="save_changes">Save changes</string>
+    <string name="task_creation">Task creation</string>
 
 </resources>

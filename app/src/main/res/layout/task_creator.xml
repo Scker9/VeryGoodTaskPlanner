@@ -12,7 +12,7 @@
         android:padding="15dp"
         android:text="@string/chooseTaskStart"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintEnd_toStartOf="@id/taskParametersDescription"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,13 +24,13 @@
         android:padding="15dp"
         android:text="@string/chooseTaskFinish"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintEnd_toStartOf="@id/taskParametersDescription"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chooseStartTextView" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/textViewsGuideLine"
+        android:id="@+id/taskParametersDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -45,7 +45,7 @@
         android:textColor="@color/brick_red"
         app:layout_constraintBaseline_toBaselineOf="@id/chooseStartTextView"
         app:layout_constraintEnd_toStartOf="@id/chooseStartTimeButton"
-        app:layout_constraintStart_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintStart_toStartOf="@id/taskParametersDescription"
         tools:text="25.12.2012 " />
 
     <Button
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:padding="15dp"
         android:text="@string/chooseTaskName"
-        app:layout_constraintEnd_toStartOf="@id/textViewsGuideLine"
+        app:layout_constraintEnd_toStartOf="@id/taskParametersDescription"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/chooseFinishTextView" />
@@ -125,7 +125,6 @@
         android:lines="10"
         android:maxLines="15"
         android:scrollbars="vertical"
-        android:singleLine="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/taskDescriptionTextView" />

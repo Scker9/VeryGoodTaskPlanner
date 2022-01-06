@@ -43,7 +43,8 @@ class DailyTasksInteractor : KoinComponent {
         if (listOfTasks.isNotEmpty()) {
             listOfHours.forEach { hour ->
                 listOfTasks.forEach { task ->
-                    if ((task.dateStart in hour.dateStart + 1 until hour.dateFinish)
+                    if (
+                        (task.dateStart in hour.dateStart + 1 until hour.dateFinish)
                         ||
                         (task.dateStart <= hour.dateStart && hour.dateFinish <= task.dateFinish)
                         ||

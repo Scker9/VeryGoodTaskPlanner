@@ -15,11 +15,8 @@ class TasksRecyclerAdapter : RecyclerView.Adapter<TasksRecyclerAdapter.TasksView
 
     inner class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val taskNameTextView = itemView.findViewById<TextView>(R.id.taskNameTextView)
-        private val taskDescriptionTextView =
-            itemView.findViewById<TextView>(R.id.taskDescriptionTextView)
         private val taskTimeRange = itemView.findViewById<TextView>(R.id.taskTimeRange)
         fun bind(taskUI: TaskUI) {
-            taskDescriptionTextView.visibility = View.GONE //по заданию не должно быть описания
             itemView.setOnClickListener {
                 onItemClick?.invoke(taskUI)
             }

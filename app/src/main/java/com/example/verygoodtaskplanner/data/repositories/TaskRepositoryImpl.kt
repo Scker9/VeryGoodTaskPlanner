@@ -23,11 +23,6 @@ class TaskRepositoryImpl : TasksRepository {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    override fun getAllTasks(): Single<List<Task>> {
-        return database.taskDao().getAllTasks().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
-
     override fun updateTask(task: Task): Completable {
         return database.taskDao().updateTask(task).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

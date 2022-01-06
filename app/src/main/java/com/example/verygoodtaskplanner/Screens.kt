@@ -6,6 +6,7 @@ import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEdit
 import com.github.terrakok.cicerone.androidx.FragmentScreen
 
 object Screens {
-    val CALENDAR_WITH_TASKS_SCREEN = FragmentScreen { CalendarTasksFragment.newInstance() }
-    fun TASK_EDITOR(taskUI: TaskUI) = FragmentScreen { TaskEditorFragment.newInstance(taskUI) }
+    fun getCalendarWithTasksScreen() = FragmentScreen { CalendarTasksFragment.newInstance() }
+    fun getTaskEditorScreen(taskUI: TaskUI) =
+        FragmentScreen { TaskEditorFragment.newInstance(taskUI) }
 }

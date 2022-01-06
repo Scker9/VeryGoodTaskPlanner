@@ -1,7 +1,6 @@
 package com.example.verygoodtaskplanner.presentation.entities
 
 import android.os.Parcelable
-import com.example.verygoodtaskplanner.data.entities.TimeRange
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

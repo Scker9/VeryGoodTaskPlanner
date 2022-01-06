@@ -13,14 +13,8 @@ interface TaskDatabaseDAO {
     @Insert
     fun addTask(task: Task): Completable
 
-    @Insert
-    fun addTasks(task: List<Task>): Completable
-
     @Update
     fun updateTask(task: Task): Completable
-
-    @Query("SELECT * FROM tasks")
-    fun getAllTasks(): Single<List<Task>>
 
     @Query(
         "SELECT * FROM tasks WHERE" +
@@ -29,9 +23,6 @@ interface TaskDatabaseDAO {
                 " OR (dateFinish BETWEEN (:dayStart) AND (:dayFinish))"
     )
     fun getTasksFilteredByStartDate(dayStart: Long, dayFinish: Long): Single<List<Task>>
-
-    @Query("DELETE FROM tasks")
-    fun clearAllTasks(): Completable
 
     @Query("DELETE FROM tasks WHERE id=(:id)")
     fun deleteTaskById(id: Long): Completable

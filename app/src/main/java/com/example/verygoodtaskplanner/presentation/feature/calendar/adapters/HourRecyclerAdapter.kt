@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.verygoodtaskplanner.R
-import com.example.verygoodtaskplanner.data.entities.TimeRange
+import com.example.verygoodtaskplanner.presentation.entities.TimeRange
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 

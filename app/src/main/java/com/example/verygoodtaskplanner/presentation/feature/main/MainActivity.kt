@@ -17,6 +17,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val navigator = AppNavigator(this, R.id.mainContainer)
         navigatorHolder.setNavigator(navigator)
-        router.newRootScreen(Screens.CALENDAR_WITH_TASKS_SCREEN)
+        router.newRootScreen(Screens.getCalendarWithTasksScreen())
     }
 }

@@ -11,8 +11,8 @@ import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
 import com.example.verygoodtaskplanner.data.getFormattedDate
 import com.example.verygoodtaskplanner.data.getFormattedTime
 import com.example.verygoodtaskplanner.databinding.TaskEditorBinding
-import com.example.verygoodtaskplanner.presentation.Tags
-import com.example.verygoodtaskplanner.presentation.Tags.got_task_tag
+import com.example.verygoodtaskplanner.presentation.utils.Tags
+import com.example.verygoodtaskplanner.presentation.utils.Tags.GOT_TASK_TAG
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.editor.presenter.TaskEditorPresenter
 import com.example.verygoodtaskplanner.presentation.utils.CalendarType
@@ -49,7 +49,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        task = this.arguments?.getParcelable(got_task_tag)
+        task = this.arguments?.getParcelable(GOT_TASK_TAG)
         timePickerRange.onTimeChanged =
             { type, calendar ->
                 presenter.displayNewTime(type, calendar)
@@ -109,7 +109,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
             Toast.makeText(requireContext(), getString(R.string.task_saved), Toast.LENGTH_SHORT)
                 .show()
         }
-        router.sendResult(Tags.saving_result_key, hasTaskChanged)
+        router.sendResult(Tags.EDITOR_SAVING_RESULT_KEY, hasTaskChanged)
         closeEditor()
     }
 
@@ -164,7 +164,9 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
         with(binding)
         {
             taskDescriptionEditText.setText(task!!.description)
-            taskDescriptionEditText.setSelection(task!!.description.lastIndex)
+            if (task!!.description.isNotEmpty()) {
+                taskDescriptionEditText.setSelection(task!!.description.lastIndex)
+            }
             chooseTaskNameEditText.setText(task!!.name)
         }
         updateDate(CalendarType.START, datePickerRange.startCalendar.getFormattedDate())
@@ -200,7 +202,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
     companion object {
         fun newInstance(taskUI: TaskUI): TaskEditorFragment {
             val bundle = Bundle()
-            bundle.putParcelable(got_task_tag, taskUI)
+            bundle.putParcelable(GOT_TASK_TAG, taskUI)
             val fragment = TaskEditorFragment()
             fragment.arguments = bundle
             return fragment

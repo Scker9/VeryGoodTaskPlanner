@@ -6,7 +6,7 @@ import java.util.*
 
 
 class TimePickerRange(
-    val context: Context,
+    private val context: Context,
     var startCalendar: Calendar = Calendar.getInstance(),
     var finishCalendar: Calendar = Calendar.getInstance(),
 ) {

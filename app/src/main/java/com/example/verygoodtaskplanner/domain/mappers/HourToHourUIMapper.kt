@@ -10,8 +10,4 @@ class HourToHourUIMapper {
             hour.dateFinish,
             TaskToTaskUIMapper().convertTaskToTaskUI(hour.tasks)
         )
-
-    fun convertHourToHourUI(hours: List<Hour>): List<HourUI> {
-        return hours.map { convertHourToHourUI(it) }
-    }
 }

@@ -5,12 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import com.example.verygoodtaskplanner.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.Screens
 import com.example.verygoodtaskplanner.databinding.CalendarWithTasksBinding
-import com.example.verygoodtaskplanner.presentation.Tags
-import com.example.verygoodtaskplanner.presentation.Tags.task_creator_dialog
+import com.example.verygoodtaskplanner.presentation.utils.Tags
+import com.example.verygoodtaskplanner.presentation.utils.Tags.TASK_CREATOR_DIALOG
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.adapters.HourRecyclerAdapter
@@ -31,7 +30,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        router.setResultListener(Tags.saving_result_key)
+        router.setResultListener(Tags.EDITOR_SAVING_RESULT_KEY)
         {
             if (it as Boolean) {
                 presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)
@@ -44,7 +43,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
                 navigateToEditor(it)
             }
         binding.addTaskButton.setOnClickListener {
-            createDialog().show(childFragmentManager, task_creator_dialog)
+            showCreatorDialog()
         }
         recyclerHour.adapter = adapter
         calendar.setOnDayClickListener {
@@ -52,18 +51,18 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
         }
     }
 
-    private fun createDialog(): CreateTaskDialogFragment {
+    override fun displayDailyTasks(tasks: List<HourUI>) {
+        adapter.fillRecycler(tasks)
+    }
+
+    override fun showCreatorDialog() {
         val dialog = CreateTaskDialogFragment()
         dialog.isCancelable = false
         dialog.onTaskCreated =
             {
-                presenter.getTasksByDay(binding.calendarView.selectedDates[0].timeInMillis)
+                presenter.getTasksByDay(binding.calendarView.selectedDates.first().timeInMillis)
             }
-        return dialog
-    }
-
-    override fun displayDailyTasks(tasks: List<HourUI>) {
-        adapter.fillRecycler(tasks)
+        dialog.show(childFragmentManager, TASK_CREATOR_DIALOG)
     }
 
     override fun onError(errorMessage: String) {
@@ -71,7 +70,7 @@ class CalendarTasksFragment : BaseFragment<CalendarWithTasksBinding>(), Calendar
     }
 
     private fun navigateToEditor(taskUI: TaskUI) {
-        router.navigateTo(Screens.TASK_EDITOR(taskUI))
+        router.navigateTo(Screens.getTaskEditorScreen(taskUI))
     }
 
     companion object {
