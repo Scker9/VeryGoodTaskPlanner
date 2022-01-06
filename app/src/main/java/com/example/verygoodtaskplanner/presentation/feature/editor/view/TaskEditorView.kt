@@ -6,5 +6,7 @@ import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface TaskEditorView : TimeRangeView {
-    fun onSuccess(resId: Int, hasTaskChanged: Boolean)
+    fun onSuccess(hasTaskChanged: Boolean)
+    fun showAreYouSureDialog()
+    fun closeEditor()
 }

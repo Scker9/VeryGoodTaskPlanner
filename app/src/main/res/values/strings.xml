@@ -38,4 +38,8 @@
     <string name="task_deleted">Задача удалена!</string>
     <string name="error_end_more_than_start">Нельзя ставить заканчивать задачи в прошлом....</string>
     <string name="task_name_is_blank">Имя задачи не может быть пустым</string>
+    <string name="are_you_sure_changes_is_not_saved">Все изменения будут потеряны, вы уверены, что хотите выйти?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+
 </resources>

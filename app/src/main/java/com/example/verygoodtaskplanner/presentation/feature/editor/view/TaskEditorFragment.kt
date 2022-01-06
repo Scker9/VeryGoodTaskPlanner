@@ -1,8 +1,10 @@
 package com.example.verygoodtaskplanner.presentation.feature.editor.view
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.verygoodtaskplanner.presentation.base.BaseFragment
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.data.getByTimeAndDateCalendars
@@ -56,6 +58,15 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
             { type, calendar ->
                 presenter.displayNewDate(type, calendar)
             }
+        requireActivity().onBackPressedDispatcher.addCallback(this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    presenter.checkForChangesAndShowDialog(
+                        oldTask = task!!,
+                        newTask = collectUIDataIntoTask()
+                    )
+                }
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,19 +90,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
             saveEditedTask.setOnClickListener {
                 presenter.saveChanges(
                     oldTask = task!!,
-                    newTask = TaskUI(
-                        Calendar.Builder().getByTimeAndDateCalendars(
-                            timePickerRange.startCalendar,
-                            datePickerRange.startCalendar
-                        ).timeInMillis,
-                        Calendar.Builder().getByTimeAndDateCalendars(
-                            timePickerRange.finishCalendar,
-                            datePickerRange.finishCalendar
-                        ).timeInMillis,
-                        binding.chooseTaskNameEditText.text.toString(),
-                        binding.taskDescriptionEditText.text.toString(),
-                        task!!.id
-                    )
+                    newTask = collectUIDataIntoTask()
                 )
             }
             toolbar.setOnMenuItemClickListener {
@@ -105,9 +104,29 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
         }
     }
 
-    override fun onSuccess(resId: Int, hasTaskChanged: Boolean) {
-        Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+    override fun onSuccess(hasTaskChanged: Boolean) {
+        if (hasTaskChanged) {
+            Toast.makeText(requireContext(), getString(R.string.task_saved), Toast.LENGTH_SHORT)
+                .show()
+        }
         router.sendResult(Tags.saving_result_key, hasTaskChanged)
+        closeEditor()
+    }
+
+    override fun showAreYouSureDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage(getString(R.string.are_you_sure_changes_is_not_saved))
+            .setCancelable(true)
+            .setPositiveButton(R.string.yes) { dialogInterface, _ ->
+                dialogInterface.cancel()
+                closeEditor()
+            }
+            .setNegativeButton(R.string.no) { dialogInterface, _ ->
+                dialogInterface.dismiss()
+            }.create().show()
+    }
+
+    override fun closeEditor() {
         router.exit()
     }
 
@@ -156,6 +175,22 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
 
     override fun onError(resId: Int) {
         Toast.makeText(requireContext(), getString(resId), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun collectUIDataIntoTask(): TaskUI {
+        return TaskUI(
+            Calendar.Builder().getByTimeAndDateCalendars(
+                timePickerRange.startCalendar,
+                datePickerRange.startCalendar
+            ).timeInMillis,
+            Calendar.Builder().getByTimeAndDateCalendars(
+                timePickerRange.finishCalendar,
+                datePickerRange.finishCalendar
+            ).timeInMillis,
+            binding.chooseTaskNameEditText.text.toString(),
+            binding.taskDescriptionEditText.text.toString(),
+            task!!.id
+        )
     }
 
     companion object {

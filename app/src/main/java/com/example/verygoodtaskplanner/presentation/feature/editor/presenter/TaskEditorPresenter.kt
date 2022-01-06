@@ -12,7 +12,7 @@ class TaskEditorPresenter : TimeRangePresenter<TaskEditorView>() {
     fun deleteTask(id: Long) {
         dailyTasksInteractor.deleteTaskById(id).subscribe(
             {
-                viewState.onSuccess(R.string.task_deleted, true)
+                viewState.onSuccess(true)
             },
             {
                 viewState.onError(it.localizedMessage)
@@ -23,18 +23,18 @@ class TaskEditorPresenter : TimeRangePresenter<TaskEditorView>() {
     fun saveChanges(oldTask: TaskUI, newTask: TaskUI) {
         when (validateTask(newTask)) {
             ValidationError.NO_ERROR ->
-                if (oldTask != newTask) {
+                if (checkIfTaskChanged(oldTask, newTask)) {
                     dailyTasksInteractor.updateTask(newTask)
                         .subscribe(
                             {
-                                viewState.onSuccess(R.string.task_saved, true)
+                                viewState.onSuccess(true)
                             },
                             {
                                 viewState.onError(it.localizedMessage)
                             }
                         ).addToCompositeDisposable()
                 } else {
-                    viewState.onSuccess(R.string.task_saved, false)
+                    viewState.onSuccess(false)
                 }
             ValidationError.END_MORE_THAN_START -> viewState.onError(
                 R.string.error_end_more_than_start
@@ -43,6 +43,17 @@ class TaskEditorPresenter : TimeRangePresenter<TaskEditorView>() {
                 R.string.task_name_is_blank
             )
         }
+    }
 
+    fun checkForChangesAndShowDialog(oldTask: TaskUI, newTask: TaskUI) {
+        if (checkIfTaskChanged(oldTask, newTask)) {
+            viewState.showAreYouSureDialog()
+        } else {
+            viewState.closeEditor()
+        }
+    }
+
+    private fun checkIfTaskChanged(oldTask: TaskUI, newTask: TaskUI): Boolean {
+        return oldTask != newTask
     }
 }

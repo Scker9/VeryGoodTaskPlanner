@@ -11,6 +11,7 @@ import com.example.verygoodtaskplanner.data.entities.TimeRange
 import com.example.verygoodtaskplanner.presentation.entities.HourUI
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 
+
 //TODO() добавить диффутилс
 class HourRecyclerAdapter : RecyclerView.Adapter<HourRecyclerAdapter.HourViewHolder>() {
     private var items: List<HourUI> = listOf()
