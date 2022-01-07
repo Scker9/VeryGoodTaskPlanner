@@ -6,7 +6,7 @@ import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndStrategy::class)
-interface TimeRangeView : BaseView {
+interface BaseTimeRangeView : BaseView {
     fun showDateDialog(type: CalendarType)
     fun showTimeDialog(type: CalendarType)
     fun updateDate(type: CalendarType, date: String)

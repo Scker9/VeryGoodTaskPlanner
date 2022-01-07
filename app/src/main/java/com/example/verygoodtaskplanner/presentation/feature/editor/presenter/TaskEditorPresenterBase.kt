@@ -2,12 +2,12 @@ package com.example.verygoodtaskplanner.presentation.feature.editor.presenter
 
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
-import com.example.verygoodtaskplanner.presentation.base.timerange.TimeRangePresenter
+import com.example.verygoodtaskplanner.presentation.base.timerange.BaseTimeRangePresenter
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.editor.view.TaskEditorView
 import org.koin.core.component.inject
 
-class TaskEditorPresenter : TimeRangePresenter<TaskEditorView>() {
+class TaskEditorPresenterBase : BaseTimeRangePresenter<TaskEditorView>() {
     private val dailyTasksInteractor by inject<DailyTasksInteractor>()
     fun deleteTask(id: Long) {
         dailyTasksInteractor.deleteTaskById(id).subscribe(

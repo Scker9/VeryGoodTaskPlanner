@@ -3,12 +3,12 @@ package com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.pre
 
 import com.example.verygoodtaskplanner.R
 import com.example.verygoodtaskplanner.domain.interactors.DailyTasksInteractor
-import com.example.verygoodtaskplanner.presentation.base.timerange.TimeRangePresenter
+import com.example.verygoodtaskplanner.presentation.base.timerange.BaseTimeRangePresenter
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.feature.calendar.dialog.view.CreateTaskDialogView
 import org.koin.core.component.inject
 
-class CreateTaskDialogPresenter : TimeRangePresenter<CreateTaskDialogView>() {
+class CreateTaskDialogPresenter : BaseTimeRangePresenter<CreateTaskDialogView>() {
     private val dailyTasksInteractor by inject<DailyTasksInteractor>()
 
     fun setDefaultTime() {

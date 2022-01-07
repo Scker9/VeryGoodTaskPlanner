@@ -7,7 +7,7 @@ import com.example.verygoodtaskplanner.presentation.entities.TaskUI
 import com.example.verygoodtaskplanner.presentation.utils.timepickers.CalendarType
 import java.util.*
 
-abstract class TimeRangePresenter<V : TimeRangeView> : BasePresenter<V>() {
+abstract class BaseTimeRangePresenter<V : BaseTimeRangeView> : BasePresenter<V>() {
     fun displayNewDate(type: CalendarType, calendar: Calendar) {
         viewState.updateDate(type, calendar.getFormattedDate())
     }

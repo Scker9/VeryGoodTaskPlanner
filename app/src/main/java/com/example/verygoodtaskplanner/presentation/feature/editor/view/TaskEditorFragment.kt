@@ -14,7 +14,7 @@ import com.example.verygoodtaskplanner.databinding.TaskEditorBinding
 import com.example.verygoodtaskplanner.presentation.utils.Tags
 import com.example.verygoodtaskplanner.presentation.utils.Tags.GOT_TASK_TAG
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
-import com.example.verygoodtaskplanner.presentation.feature.editor.presenter.TaskEditorPresenter
+import com.example.verygoodtaskplanner.presentation.feature.editor.presenter.TaskEditorPresenterBase
 import com.example.verygoodtaskplanner.presentation.utils.timepickers.CalendarType
 import com.example.verygoodtaskplanner.presentation.utils.timepickers.DatePickerRange
 import com.example.verygoodtaskplanner.presentation.utils.timepickers.TimePickerRange
@@ -28,7 +28,7 @@ class TaskEditorFragment : BaseFragment<TaskEditorBinding>(), TaskEditorView {
     private var task: TaskUI? = null
 
     @InjectPresenter
-    lateinit var presenter: TaskEditorPresenter
+    lateinit var presenter: TaskEditorPresenterBase
     private val datePickerRange: DatePickerRange by lazy {
         DatePickerRange(
             requireContext(),
