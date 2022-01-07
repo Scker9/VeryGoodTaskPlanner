@@ -1,6 +1,6 @@
 package com.example.verygoodtaskplanner.data.repositories
 
-import com.example.verygoodtaskplanner.presentation.extensions.ADD_DAY
+import com.example.verygoodtaskplanner.data.utils.ADD_DAY
 import com.example.verygoodtaskplanner.data.database.TaskDatabase
 import com.example.verygoodtaskplanner.data.entities.Task
 import com.example.verygoodtaskplanner.domain.repositories.TasksRepository
