@@ -1,6 +1,6 @@
 package com.example.verygoodtaskplanner.data.entities
 
-import com.example.verygoodtaskplanner.data.ADD_HOUR
+import com.example.verygoodtaskplanner.presentation.extensions.ADD_HOUR
 
 data class Hour(
     val dateStart: Long,

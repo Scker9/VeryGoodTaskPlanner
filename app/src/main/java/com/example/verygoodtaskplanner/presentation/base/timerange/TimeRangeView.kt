@@ -1,7 +1,7 @@
 package com.example.verygoodtaskplanner.presentation.base.timerange
 
 import com.example.verygoodtaskplanner.presentation.base.BaseView
-import com.example.verygoodtaskplanner.presentation.utils.CalendarType
+import com.example.verygoodtaskplanner.presentation.utils.timepickers.CalendarType
 import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType
 

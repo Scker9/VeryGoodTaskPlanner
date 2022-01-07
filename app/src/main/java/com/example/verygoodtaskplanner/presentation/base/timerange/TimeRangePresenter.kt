@@ -1,10 +1,10 @@
 package com.example.verygoodtaskplanner.presentation.base.timerange
 
 import com.example.verygoodtaskplanner.presentation.base.BasePresenter
-import com.example.verygoodtaskplanner.data.getFormattedDate
-import com.example.verygoodtaskplanner.data.getFormattedTime
+import com.example.verygoodtaskplanner.presentation.extensions.getFormattedDate
+import com.example.verygoodtaskplanner.presentation.extensions.getFormattedTime
 import com.example.verygoodtaskplanner.presentation.entities.TaskUI
-import com.example.verygoodtaskplanner.presentation.utils.CalendarType
+import com.example.verygoodtaskplanner.presentation.utils.timepickers.CalendarType
 import java.util.*
 
 abstract class TimeRangePresenter<V : TimeRangeView> : BasePresenter<V>() {

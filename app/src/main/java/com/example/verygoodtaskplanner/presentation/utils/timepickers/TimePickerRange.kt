@@ -1,4 +1,4 @@
-package com.example.verygoodtaskplanner.presentation.utils
+package com.example.verygoodtaskplanner.presentation.utils.timepickers
 
 import android.app.TimePickerDialog
 import android.content.Context

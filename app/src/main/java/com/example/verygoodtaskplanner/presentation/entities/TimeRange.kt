@@ -1,7 +1,7 @@
 package com.example.verygoodtaskplanner.presentation.entities
 
-import com.example.verygoodtaskplanner.data.getFormattedDate
-import com.example.verygoodtaskplanner.data.getFormattedTime
+import com.example.verygoodtaskplanner.presentation.extensions.getFormattedDate
+import com.example.verygoodtaskplanner.presentation.extensions.getFormattedTime
 import java.util.*
 
 abstract class TimeRange {
